@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: darka
- * Date: 25/07/2018
- * Time: 20:38
- */
 
 namespace PLejeune\TableBundle\Fields;
 
