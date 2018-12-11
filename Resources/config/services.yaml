@@ -1,0 +1,7 @@
+services:
+    plejeune.table:
+        public : true
+        class: PLejeune\TableBundle\Service\TableService
+        arguments: ["@service_container"]
+        tags:
+            -  { name: twig.extension }

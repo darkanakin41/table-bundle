@@ -1,0 +1,184 @@
+{% block table %}
+    {% if table.displayMenu %}
+        <div class="top-bar table-menu">
+            <div class="top-bar-left">
+                <ul class="dropdown menu" data-dropdown-menu>
+                    <li>
+                        <a href="#" data-open="{{ table.alias }}-filters">
+                            <i class="fa fa-filter"></i> {% if table.displayMenuLabel %}{{ 'action.search'|trans }}{% endif %}
+                        </a>
+                    </li>
+                    {% if table.displayColumnSelector and table.fieldsAvailable|length > 0 %}
+                        <li class="has-submenu">
+                            <a href="#">
+                                <i class="far fa-plus-square"></i> {% if table.displayMenuLabel %}{{ 'action.display'|trans }}{% endif %}
+                            </a>
+                            <ul class="submenu menu vertical">
+                                {% for fieldname in table.fieldsAvailable %}
+                                    {% set field = table.field(fieldname) %}
+                                    {% if field.visible %}
+                                        <li>
+                                            <a href="{{ path(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")|merge({'action' : 'add_field', 'field' : fieldname})) }}">
+                                                {{ field.label|trans|replace({'<br/>':'/'})|title }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endif %}
+                    {% if table.displayColumnSelector and table.fieldsDisplayed|length > 0 %}
+                        <li class="has-submenu">
+                            <a href="#">
+                                <i class="far fa-minus-square"></i> {% if table.displayMenuLabel %}{{ 'action.hide'|trans }}{% endif %}
+                            </a>
+                            <ul class="submenu menu vertical">
+                                {% for fieldname in table.fieldsDisplayed %}
+                                    {% set field = table.field(fieldname) %}
+                                    {% if field.visible %}
+                                        <li>
+                                            <a href="{{ path(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")|merge({'action' : 'remove_field', 'field' : fieldname})) }}">
+                                                {{ field.label|trans|replace({'<br/>':'/'})|title }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endif %}
+                    {% if table.displayColumnSelector and table.fieldsDisplayed != table.fieldsDisplayedDefault %}
+                        <li>
+                            <a href="{{ path(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")|merge({'action' : 'reset_field'})) }}">
+                                <i class="fas fa-undo"></i> {% if table.displayMenuLabel %}{{ 'action.reset_columns'|trans }}Réinitialiser les colones{% endif %}
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            {% if table.actions is not empty %}
+                <div class="top-bar-right">
+                    <ul class="menu">
+                        {% for action in table.actions %}
+                            <li>
+                                <a href="{{ path(action.route, action.routeParam) }}">
+                                    {% if action.translate %}
+                                        {{ action.label|lower|trans }}
+                                    {% else %}
+                                        {{ action.label }}
+                                    {% endif %}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+    {% set items = table.paginator %}
+    {% block content %}
+        {% if items|length > 0 %}
+            <table class="{{ table.tableClasses|join(' ') }}">
+                <thead>
+                <tr>
+                    {% for fieldname in table.fieldsDisplayed %}
+                        {% set field = table.field(fieldname) %}
+                        <th class="{{ field.classes|join(' ') }}">
+                            {% if field.sortable %}
+                                {% if field.jointure is not null %}
+                                    {{ knp_pagination_sortable(items, field.label|trans|raw, field.dql(table.alias)) }}
+                                {% else %}
+                                    {{ knp_pagination_sortable(items, field.label|trans|raw, table.alias ~ "." ~ field.field) }}
+                                {% endif %}
+                            {% else %}
+                                {{ field.label|trans|raw }}
+                            {% endif %}
+                        </th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in items %}
+                    <tr>
+                        {% for fieldname in table.fieldsDisplayed %}
+                            {% set field = table.field(fieldname) %}
+                            <td class="{{ field.classes|join(' ') }}">
+                                {{ table_render_field(table, field, item) }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+                {% if  table.displayPagination or  table.displayTotalItems %}
+                    <tfoot>
+                    <tr>
+                        <td class="text-left" colspan="{{ table.fieldsDisplayed|length / 2 }}">
+                            {{ block('pagination') }}
+                        </td>
+                        <td class="text-right" colspan="{{ (table.fieldsDisplayed|length / 2) + (table.fieldsDisplayed|length % 2) }}">
+                            {{ block('total_items') }}
+                        </td>
+                    </tr>
+                    </tfoot>
+                {% endif %}
+            </table>
+        {% else %}
+            {{ block('no_result') }}
+        {% endif %}
+    {% endblock content %}
+    {% if table.displayMenu %}
+        <div class="reveal {% if table.fields|length > 8 %}large{% endif %}" id="{{ table.alias }}-filters" data-reveal>
+            {% set search_form = table.searchForm %}
+            {{ form_start(search_form) }}
+            <div class="header">
+                <h3 class="title">{{ 'action.search'|trans }}</h3>
+                <button class="close-button" data-close aria-label="Close modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="body">
+                {% if table.fields|length > 8 %}
+                    <div class="grid grid-x grid-padding-x">
+                        {% for field in table.fields if field.filterable %}
+                            <div class="cell medium-6">
+                                {{ form_row(attribute(search_form,field.id)) }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {% for field in table.fields if field.filterable %}
+                        {{ form_row(attribute(search_form,field.id)) }}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="footer text-right">
+                <div class="button-group">
+                    <a href="{{ path(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")) }}" class="button warning">
+                        <i class="fa fa-eraser"></i> {{ 'action.reset_filter'|trans }}
+                    </a>
+                    {{ form_widget(search_form.submit) }}
+                </div>
+            </div>
+            {{ form_end(search_form) }}
+        </div>
+    {% endif %}
+{% endblock table %}
+
+{% block no_result %}
+    <div class="callout primary">
+        <h4>{{ 'callout.no_result.titre'|trans }}</h4>
+        <p>
+            {{ 'callout.no_result.body'|trans|raw }}
+        </p>
+    </div>
+{% endblock %}
+
+{% block pagination %}
+    {% if table.displayPagination %}
+        {{ knp_pagination_render(items) }}
+    {% endif %}
+{% endblock %}
+{% block total_items %}
+    {% if table.displayTotalItems %}
+        Total : {{ items.totalItemCount }}
+    {% endif %}
+{% endblock %}

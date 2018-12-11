@@ -1,0 +1,89 @@
+{% block raw %}
+    {% set value = table.value(item,field) %}
+    {% if field.valueToLabels is not empty %}
+        {% set value = field.valueToLabel(value) %}
+    {% endif %}
+    {% if field.translationPrefix is not null and field.translation %}
+        {% set value = (field.translationPrefix ~ value) %}
+    {% endif %}
+    {% if field.translation %}
+        {{ value|lower|trans }}
+    {% else %}
+        {{ value }}
+    {% endif %}
+{% endblock %}
+
+{% block map %}
+    {{ field.value(table.value(item,field)) }}
+{% endblock %}
+
+{% block star %}
+    {% for i in 0..(table.value(item,field) - 1) %}
+        <i class="fa fa-star"></i>
+    {% endfor %}
+{% endblock %}
+
+{% block array %}
+    {% for a_item in table.value(item,field) %}{% if not loop.first %}, {% endif %}{{ a_item }}{% endfor %}
+{% endblock %}
+
+{% block count %}
+    {{ table.value(item,field)|length }}
+{% endblock %}
+
+{% block user %}
+    {% set user = table.value(item,field) %}
+    {% if user is null %}
+        #N/C
+    {% else %}
+        {% for attribute in field.displayedAttributes %}{{ attribute(user, attribute) }} {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{% block integration %}
+    <input readonly value='[{{ field.prefix }}={{ table.value(item,field) }}]'/>
+{% endblock %}
+
+{% block boolean %}
+    {% if table.value(item,field) %}
+        <span class="label success">{{ block('raw') }}</span>
+    {% else %}
+        <span class="label alert">{{ block('raw') }}</span>
+    {% endif %}
+{% endblock %}
+
+{% block datetime %}
+    {% if table.value(item,field) is not null %}
+        {{ table.value(item,field)|date(field.format) }}
+    {% endif %}
+{% endblock %}
+
+{% block image %}
+    {% if table.value(item,field) is not null %}
+        {% if field.displayed %}
+            <img src="{{ asset(table.value(item,field)) }}" alt="{{ field.label|trans }}" title="{{ field.label|trans }}"/>
+        {% else %}
+            <a href="{{ asset(table.value(item,field)) }}" target="_blank">
+                Voir
+            </a>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block URL %}
+    {% set value = table.value(item,field) %}
+    {% if value is not null %}
+        {% if field.link is empty %}
+            {% set url = path(field.route, field.getCalculatedParams(item)) %}
+        {% else %}
+            {% set url = field.buildLink(item) %}
+        {% endif %}
+        <a href="{{ url }}" target="{{ field.target }}">
+            {% if field.linkLabel is empty %}
+                {{ block(field.subBlock) }}
+            {% else %}
+                {{ field.linkLabel }}
+            {% endif %}
+        </a>
+    {% endif %}
+{% endblock %}
