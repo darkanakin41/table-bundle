@@ -87,7 +87,11 @@ class Filter
      * @return string
      */
     public function getDQL($key, $alias){
-        return $this->getField()->getDQL($alias) . " = :" . $this->getAlias($key);
+        $sign = "=";
+        if($this->isNot()){
+            $sign = "<>";
+        }
+        return $this->getField()->getDQL($alias) . " " . $sign . " :" . $this->getAlias($key);
     }
 
     /**
