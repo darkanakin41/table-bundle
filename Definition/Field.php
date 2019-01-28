@@ -116,9 +116,9 @@ class Field
      * @param mixed $labels
      * @return self
      */
-    public function setValueToLabels($labels)
+    public function setValueToLabels(array $labels)
     {
-        $this->value_to_label = $labels;
+        $this->value_to_label = array_change_key_case($labels, CASE_LOWER);
         return $this;
     }
 
