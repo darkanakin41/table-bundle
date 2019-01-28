@@ -13,6 +13,12 @@
     {% endif %}
 {% endblock %}
 
+{% block action %}
+    <button class="button" {% for attribute in field.attributes|keys %}{{ attribute}}="{{ field.buildAttribute(attribute, item) }}" {% endfor %}>
+    {{ field.buttonLabel|trans }}
+    </button>
+{% endblock %}
+
 {% block map %}
     {{ field.value(table.value(item,field)) }}
 {% endblock %}
