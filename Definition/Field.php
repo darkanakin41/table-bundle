@@ -146,6 +146,7 @@ class Field
      */
     public function getValueToLabel($key)
     {
+        if($key === null) return "#N/C";
         return isset($this->value_to_label[$key]) ? $this->value_to_label[$key] : "unknown_value";
     }
 
