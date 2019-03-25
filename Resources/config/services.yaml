@@ -1,7 +1,11 @@
 services:
-    plejeune.table:
+    PLejeune\TableBundle\Service\TableService:
         public : true
         class: PLejeune\TableBundle\Service\TableService
         arguments: ["@service_container"]
         tags:
-            -  { name: twig.extension }
+            - { name: twig.extension }
+
+    plejeune.table:
+        public : true
+        alias: PLejeune\TableBundle\Service\TableService
