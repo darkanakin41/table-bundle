@@ -21,6 +21,7 @@ class ActionField extends Field
         parent::__construct($field, $label, $id);
         $this->setBlock("action");
         $this->setAttributes([]);
+        $this->setButtonLabel("");
     }
 
     /**
