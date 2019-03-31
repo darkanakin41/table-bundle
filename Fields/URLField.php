@@ -190,7 +190,6 @@ class URLField extends Field
 
     public function getCalculatedParams($item)
     {
-        $converter = new CamelCaseToSnakeCaseNameConverter();
         $return = array();
         foreach ($this->getRouteParams() as $key => $fieldname) {
             $field = $this->getTable()->getField($fieldname);
