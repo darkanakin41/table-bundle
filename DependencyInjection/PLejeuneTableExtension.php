@@ -15,6 +15,11 @@ class PLejeuneTableExtension extends Extension
         $loader = new YamlFileLoader($container,new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yaml');
 
+        $configuration = new Configuration();
+        $processedConfig = $this->processConfiguration($configuration, $configs);
+
+        $container->setParameter('plejeune.table.config',$processedConfig);
+
     }
 
     public function prepend(ContainerBuilder $container)

@@ -58,7 +58,8 @@ class TableService extends \Twig_Extension
             $this->container->get("doctrine"),
             $this->container->get("twig"),
             $this->container->get("session"),
-            $this->container->get("form.factory")
+            $this->container->get("form.factory"),
+            $this->container->getParameter("plejeune.table.config")
         );
         return $table;
     }

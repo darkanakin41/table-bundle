@@ -138,7 +138,7 @@ abstract class AbstractTable
      */
     private $actions;
 
-    public function __construct(PaginatorInterface $paginator, RequestStack $request_stack, RegistryInterface $doctrine, \Twig_Environment $twigEnvironment, SessionInterface $session, FormFactoryInterface $formFactory)
+    public function __construct(PaginatorInterface $paginator, RequestStack $request_stack, RegistryInterface $doctrine, \Twig_Environment $twigEnvironment, SessionInterface $session, FormFactoryInterface $formFactory, array $config = [])
     {
         $this->paginator = $paginator;
         $this->request_stack = $request_stack;
@@ -160,7 +160,11 @@ abstract class AbstractTable
         $this->setDisplayTotalItems(TRUE);
         $this->setDisplayMenuLabel(FALSE);
 
-        $this->setTemplate("@PLejeuneTable/table.html.twig");
+        if(isset($config['template']) && !empty($config['template'])){
+            $this->setTemplate($config['template']);
+        }else{
+            $this->setTemplate("@PLejeuneTable/table.html.twig");
+        }
         $this->setTemplateFields(["@PLejeuneTable/fields.html.twig"]);
 
         $this->setLimit(10);
