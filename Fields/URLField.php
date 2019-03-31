@@ -47,6 +47,7 @@ class URLField extends Field
         $this->setTarget("");
         $this->setSubBlock("raw");
         $this->setFilterable(false);
+        $this->setLinkClasses([]);
     }
 
 
