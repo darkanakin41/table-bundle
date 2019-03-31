@@ -13,6 +13,11 @@
     {% endif %}
 {% endblock %}
 
+{% block icon %}
+    {% set value = table.value(item,field) %}
+    <i class="{{ value }}"></i>
+{% endblock %}
+
 {% block action %}
     <button class="button" {% for attribute in field.attributes|keys %}{{ attribute}}="{{ field.buildAttribute(attribute, item) }}" {% endfor %}>
     {{ field.buttonLabel|trans }}
@@ -84,7 +89,7 @@
         {% else %}
             {% set url = field.buildLink(item) %}
         {% endif %}
-        <a href="{{ url }}" target="{{ field.target }}">
+        <a href="{{ url }}" target="{{ field.target }}" class="{{ field.classes|join(' ') }}">
             {% if field.linkLabel is empty %}
                 {{ block(field.subBlock) }}
             {% else %}
