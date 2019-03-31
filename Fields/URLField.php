@@ -22,7 +22,7 @@ class URLField extends Field
     /**
      * @var string
      */
-    private $sub_block;
+    private $subBlock;
     /**
      * @var string
      */
@@ -30,11 +30,15 @@ class URLField extends Field
     /**
      * @var string[]
      */
-    private $link_params;
+    private $linkParams;
     /**
      * @var string
      */
-    private $link_label;
+    private $linkLabel;
+    /**
+     * @var array
+     */
+    private $linkClasses;
 
     public function __construct($field, $label = NULL, $id = NULL)
     {
@@ -105,16 +109,17 @@ class URLField extends Field
      */
     public function getSubBlock()
     {
-        return $this->sub_block;
+        return $this->subBlock;
     }
 
     /**
-     * @param mixed $sub_block
+     * @param mixed $subBlock
+     *
      * @return URLField
      */
-    public function setSubBlock($sub_block)
+    public function setSubBlock($subBlock)
     {
-        $this->sub_block = $sub_block;
+        $this->subBlock = $subBlock;
         return $this;
     }
 
@@ -141,16 +146,17 @@ class URLField extends Field
      */
     public function getLinkLabel()
     {
-        return $this->link_label;
+        return $this->linkLabel;
     }
 
     /**
-     * @param mixed $link_label
+     * @param mixed $linkLabel
+     *
      * @return URLField
      */
-    public function setLinkLabel($link_label)
+    public function setLinkLabel($linkLabel)
     {
-        $this->link_label = $link_label;
+        $this->linkLabel = $linkLabel;
         return $this;
     }
 
@@ -159,18 +165,44 @@ class URLField extends Field
      */
     public function getLinkParams(): array
     {
-        return $this->link_params;
+        return $this->linkParams;
     }
 
     /**
-     * @param string[] $link_params
+     * @param string[] $linkParams
+     *
      * @return URLField
      */
-    public function setLinkParams(array $link_params): URLField
+    public function setLinkParams(array $linkParams): URLField
     {
-        $this->link_params = $link_params;
+        $this->linkParams = $linkParams;
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function getLinkClasses(): array
+    {
+        return $this->linkClasses;
+    }
+
+    /**
+     * @param array $linkClasses
+     */
+    public function setLinkClasses(array $linkClasses): void
+    {
+        $this->linkClasses = $linkClasses;
+    }
+
+    /**
+     * @param string $linkClass
+     */
+    public function addLinkClass($linkClass): void
+    {
+        $this->linkClasses[] = $linkClass;
+    }
+
 
     public function buildLink($item){
         $converter = new CamelCaseToSnakeCaseNameConverter();

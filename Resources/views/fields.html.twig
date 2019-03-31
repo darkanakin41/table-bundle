@@ -89,7 +89,7 @@
         {% else %}
             {% set url = field.buildLink(item) %}
         {% endif %}
-        <a href="{{ url }}" target="{{ field.target }}" class="{{ field.classes|join(' ') }}">
+        <a href="{{ url }}" target="{{ field.target }}" class="{{ field.linkClasses|join(' ') }}">
             {% if field.linkLabel is empty %}
                 {{ block(field.subBlock) }}
             {% else %}
