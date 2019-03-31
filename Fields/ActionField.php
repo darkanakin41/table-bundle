@@ -14,12 +14,13 @@ class ActionField extends Field
     /**
      * @var string
      */
-    private $button_label;
+    private $buttonLabel;
 
     public function __construct($field, $label = NULL, $id = NULL)
     {
         parent::__construct($field, $label, $id);
         $this->setBlock("action");
+        $this->setAttributes([]);
     }
 
     /**
@@ -41,20 +42,32 @@ class ActionField extends Field
     }
 
     /**
+     * @param string $attribute
+     *
+     * @return ActionField
+     */
+    public function addAttribute($attribute): ActionField
+    {
+        $this->attributes[] = $attribute;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getButtonLabel(): string
     {
-        return $this->button_label;
+        return $this->buttonLabel;
     }
 
     /**
-     * @param string $button_label
+     * @param string $buttonLabel
+     *
      * @return ActionField
      */
-    public function setButtonLabel(string $button_label): ActionField
+    public function setButtonLabel(string $buttonLabel): ActionField
     {
-        $this->button_label = $button_label;
+        $this->buttonLabel = $buttonLabel;
         return $this;
     }
 
