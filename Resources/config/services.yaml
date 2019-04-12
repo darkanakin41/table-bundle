@@ -22,5 +22,3 @@ services:
     _instanceof:
         PLejeune\TableBundle\Definition\AbstractTable:
             public: true
-            calls:
-                - [setConfig, ['%plejeune.table.config%']]

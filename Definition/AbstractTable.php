@@ -7,6 +7,7 @@ use PLejeune\TableBundle\Form\SearchForm;
 use Doctrine\ORM\Query;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
@@ -132,9 +133,9 @@ abstract class AbstractTable
      */
     private $template;
     /**
-     * @var string[]
+     * @var string
      */
-    private $template_fields;
+    private $templateFields;
     /**
      * @var string[]
      */
@@ -144,7 +145,7 @@ abstract class AbstractTable
      */
     private $actions;
 
-    public function __construct(PaginatorInterface $paginator, RequestStack $request_stack, RegistryInterface $doctrine, Twig_Environment $twigEnvironment, SessionInterface $session, FormFactoryInterface $formFactory, array $config = [])
+    public function __construct(PaginatorInterface $paginator, RequestStack $request_stack, RegistryInterface $doctrine, Twig_Environment $twigEnvironment, SessionInterface $session, FormFactoryInterface $formFactory, ParameterBagInterface $parameterBag)
     {
         $this->paginator = $paginator;
         $this->request_stack = $request_stack;
@@ -156,6 +157,8 @@ abstract class AbstractTable
         $this->jointures = [];
         $this->filters = [];
         $this->sort = [];
+
+        $this->setConfig($parameterBag->get('plejeune.table.config'));
 
         $this->setTableClasses([]);
         $this->setActions([]);
@@ -180,7 +183,7 @@ abstract class AbstractTable
         $this->generate();
     }
 
-    public function setConfig(array $config){
+    private function setConfig(array $config){
         $this->setTemplate($config['template']['table']);
         $this->setTemplateFields($config['template']['fields']);
     }
@@ -254,31 +257,21 @@ abstract class AbstractTable
 
 
     /**
-     * @return string[]
+     * @return string
      */
-    public function getTemplateFields(): array
+    public function getTemplateFields(): string
     {
-        return $this->template_fields;
+        return $this->templateFields;
     }
 
     /**
-     * @return string[]
-     */
-    public function addTemplateField($template): AbstractTable
-    {
-        if (array_search($template, $this->getTemplateFields()) === FALSE) {
-            $this->template_fields[] = $template;
-        }
-        return $this;
-    }
-
-    /**
-     * @param string[] $template_fields
+     * @param string $templateFields
+     *
      * @return AbstractTable
      */
-    public function setTemplateFields(array $template_fields): AbstractTable
+    public function setTemplateFields($templateFields): AbstractTable
     {
-        $this->template_fields = $template_fields;
+        $this->templateFields = $templateFields;
         return $this;
     }
 

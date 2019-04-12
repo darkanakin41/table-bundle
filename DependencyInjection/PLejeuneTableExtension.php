@@ -13,19 +13,19 @@ class PLejeuneTableExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new YamlFileLoader($container,new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yaml');
 
-        $extraConfig = Yaml::parse(
+        $defaultConfig = Yaml::parse(
             file_get_contents(__DIR__.'/../Resources/config/config.yaml')
         );
-
-        $configs[] = $extraConfig;
 
         $configuration = new Configuration();
         $processedConfig = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('plejeune.table.config',$processedConfig);
+        $bundleConfig = $this->arrayMergeRecursiveDistinct($processedConfig, $defaultConfig);
+
+        $container->setParameter('plejeune.table.config', $bundleConfig);
     }
 
     public function prepend(ContainerBuilder $container)
@@ -37,4 +37,18 @@ class PLejeuneTableExtension extends Extension
         $container->prependExtensionConfig('twig', array('paths' => array(__DIR__.'/../Resources/views' => "PLejeuneTable")));
     }
 
+    private function arrayMergeRecursiveDistinct(array &$array1, array &$array2)
+    {
+        $merged = $array1;
+
+        foreach ($array2 as $key => &$value) {
+            if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
+                $merged[$key] = $this->arrayMergeRecursiveDistinct($merged[$key], $value);
+            }elseif(!isset($merged[$key])) {
+                $merged[$key] = $value;
+            }
+        }
+
+        return $merged;
+    }
 }

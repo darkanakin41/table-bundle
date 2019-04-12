@@ -23,13 +23,8 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('template')
                 ->children()
-                    ->arrayNode('fields')
-                        ->isRequired()
-                        ->scalarPrototype()->end()
-                    ->end()
-                    ->scalarNode('table')
-                        ->isRequired()
-                    ->end()
+                    ->scalarNode('fields')->end()
+                    ->scalarNode('table')->end()
                 ->end()
             ->end();
 

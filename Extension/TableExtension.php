@@ -5,6 +5,7 @@ namespace PLejeune\TableBundle\Extension;
 
 use PLejeune\TableBundle\Definition\AbstractTable;
 use PLejeune\TableBundle\Definition\Field;
+use PLejeune\TableBundle\Exception\UnknownBlockException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Throwable;
 use Twig\Error\LoaderError;
@@ -57,16 +58,14 @@ class TableExtension extends AbstractExtension
      * @param mixed         $item
      *
      * @return string
+     * @throws UnknownBlockException
      */
     public function renderField(AbstractTable $table, Field $field, $item)
     {
-        foreach (array_reverse($table->getTemplateFields()) as $template) {
-            $template = $this->container->get("twig")->load($template);
-            if (!$template->hasBlock($field->getBlock())) {
-                continue;
-            }
-            return $template->renderBlock($field->getBlock(), array('table' => $table, 'field' => $field, 'item' => $item));
+        $template = $this->container->get("twig")->load($table->getTemplateFields());
+        if (!$template->hasBlock($field->getBlock())) {
+            throw new UnknownBlockException("Unknown block");
         }
-        return "";
+        return $template->renderBlock($field->getBlock(), array('table' => $table, 'field' => $field, 'item' => $item));
     }
 }
