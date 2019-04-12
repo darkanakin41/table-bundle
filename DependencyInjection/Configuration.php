@@ -12,7 +12,7 @@ class Configuration implements ConfigurationInterface
     /**
      * Generates the configuration tree builder.
      *
-     * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder
+     * @return TreeBuilder The tree builder
      */
     public function getConfigTreeBuilder()
     {
@@ -21,7 +21,16 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('template')->end()
+                ->arrayNode('template')
+                ->children()
+                    ->arrayNode('fields')
+                        ->isRequired()
+                        ->scalarPrototype()->end()
+                    ->end()
+                    ->scalarNode('table')
+                        ->isRequired()
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

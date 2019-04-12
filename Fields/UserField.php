@@ -17,7 +17,7 @@ class UserField extends Field
         $this->setSortable(FALSE);
         $this->setFilterable(FALSE);
 
-        $this->setDisplayedAttributes(array("firstname"));
+        $this->setDisplayedAttributes(["firstname"]);
     }
 
     /**

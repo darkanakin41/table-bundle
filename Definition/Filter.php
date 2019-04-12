@@ -99,9 +99,9 @@ class Filter
      * @return array
      */
     public function getDQLParameters($key){
-        return array(
+        return [
             $this->getAlias($key) => $this->getValue(),
-        );
+        ];
     }
 
     /**

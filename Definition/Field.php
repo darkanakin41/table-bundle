@@ -18,7 +18,7 @@ class Field
      */
     private $field;
     /**
-     * @var Jointure
+     * @var Jointure|null
      */
     private $jointure;
     /**
@@ -53,7 +53,7 @@ class Field
     private $numeric;
 
     /**
-     * @var string
+     * @var array
      */
     private $value_to_label;
 
@@ -66,7 +66,7 @@ class Field
      */
     private $translation_prefix;
     /**
-     * @var AbstractTable
+     * @var AbstractTable|null
      */
     private $table;
 
@@ -80,7 +80,7 @@ class Field
         $this->setChoice(FALSE);
         $this->setSortable(TRUE);
         $this->setVisible(TRUE);
-        $this->setClasses(array());
+        $this->setClasses([]);
         $this->setNumeric(FALSE);
         $this->setTranslation(FALSE);
     }
@@ -88,7 +88,7 @@ class Field
     /**
      * @return AbstractTable
      */
-    public function getTable(): AbstractTable
+    public function getTable(): ?AbstractTable
     {
         return $this->table;
     }
@@ -141,7 +141,7 @@ class Field
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @return string
      */
     public function getValueToLabel($key)

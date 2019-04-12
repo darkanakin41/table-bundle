@@ -7,6 +7,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\Yaml\Yaml;
 
 class PLejeuneTableExtension extends Extension
 {
@@ -15,11 +16,16 @@ class PLejeuneTableExtension extends Extension
         $loader = new YamlFileLoader($container,new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yaml');
 
+        $extraConfig = Yaml::parse(
+            file_get_contents(__DIR__.'/../Resources/config/config.yaml')
+        );
+
+        $configs[] = $extraConfig;
+
         $configuration = new Configuration();
         $processedConfig = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('plejeune.table.config',$processedConfig);
-
     }
 
     public function prepend(ContainerBuilder $container)

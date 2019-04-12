@@ -4,13 +4,32 @@ namespace PLejeune\TableBundle\Definition;
 
 class Jointure
 {
+    /**
+     * @var string
+     */
     private $id;
+    /**
+     * @var string
+     */
     private $field;
-    private $parent;
+    /**
+     * @var string
+     */
     private $class;
+    /**
+     * @var Jointure
+     */
+    private $parent;
+
+    public function __construct(string $class, string $field, string $id)
+    {
+        $this->setClass($class);
+        $this->setField($field);
+        $this->setId($id);
+    }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getId()
     {
@@ -18,17 +37,15 @@ class Jointure
     }
 
     /**
-     * @param mixed $id
-     * @return Jointure
+     * @param string $id
      */
     public function setId($id)
     {
         $this->id = $id;
-        return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getField()
     {
@@ -36,17 +53,15 @@ class Jointure
     }
 
     /**
-     * @param mixed $field
-     * @return Jointure
+     * @param string $field
      */
     public function setField($field)
     {
         $this->field = $field;
-        return $this;
     }
 
     /**
-     * @return mixed
+     * @return Jointure
      */
     public function getParent()
     {
@@ -54,13 +69,11 @@ class Jointure
     }
 
     /**
-     * @param mixed $parent
-     * @return Jointure
+     * @param Jointure $parent
      */
-    public function setParent($parent)
+    public function setParent(Jointure $parent)
     {
         $this->parent = $parent;
-        return $this;
     }
 
     /**
@@ -82,10 +95,12 @@ class Jointure
     }
 
     /**
+     * @param string $default
+     *
      * @return string
      */
     public function getDQL($default = ""){
-        if(!is_null($this->getParent())){
+        if($this->getParent() !== null){
             return $this->getParent()->getId() . "." . $this->getField();
         }
         return $default . "." . $this->getField();

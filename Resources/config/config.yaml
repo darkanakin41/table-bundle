@@ -1,0 +1,4 @@
+template:
+    fields:
+        - '@PLejeune/fields.html.twig'
+    table: '@PLejeune/table.html.twig'
