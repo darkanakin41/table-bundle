@@ -34,6 +34,7 @@ class ArrayField extends Field
 
     /**
      * @param string $separator
+     *
      * @return ArrayField
      */
     public function setSeparator(?string $separator): ArrayField
@@ -52,6 +53,7 @@ class ArrayField extends Field
 
     /**
      * @param string $sub_block
+     *
      * @return ArrayField
      */
     public function setSubBlock(?string $sub_block): ArrayField

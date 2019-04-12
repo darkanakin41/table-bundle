@@ -5,7 +5,7 @@ use PLejeune\TableBundle\Definition\Field;
 
 class DateTimeField extends Field
 {
-    private $format = "d/m/Y \à H:i";
+    private $format;
 
     public function __construct($field, $label = NULL, $jointure = NULL, $id = NULL)
     {

@@ -9,9 +9,15 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
+use Throwable;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig_Environment;
 
 abstract class AbstractTable
 {
@@ -38,7 +44,7 @@ abstract class AbstractTable
     private $jointures;
 
     /**
-     * @var \Twig_Environment
+     * @var Twig_Environment
      */
     private $twig;
 
@@ -138,7 +144,7 @@ abstract class AbstractTable
      */
     private $actions;
 
-    public function __construct(PaginatorInterface $paginator, RequestStack $request_stack, RegistryInterface $doctrine, \Twig_Environment $twigEnvironment, SessionInterface $session, FormFactoryInterface $formFactory, array $config = [])
+    public function __construct(PaginatorInterface $paginator, RequestStack $request_stack, RegistryInterface $doctrine, Twig_Environment $twigEnvironment, SessionInterface $session, FormFactoryInterface $formFactory, array $config = [])
     {
         $this->paginator = $paginator;
         $this->request_stack = $request_stack;
@@ -160,13 +166,6 @@ abstract class AbstractTable
         $this->setDisplayTotalItems(TRUE);
         $this->setDisplayMenuLabel(FALSE);
 
-        if(isset($config['template']) && !empty($config['template'])){
-            $this->setTemplate($config['template']);
-        }else{
-            $this->setTemplate("@PLejeuneTable/table.html.twig");
-        }
-        $this->setTemplateFields(["@PLejeuneTable/fields.html.twig"]);
-
         $this->setLimit(10);
         $this->__init__();
 
@@ -179,6 +178,11 @@ abstract class AbstractTable
 
         $this->generateSearchForm();
         $this->generate();
+    }
+
+    public function setConfig(array $config){
+        $this->setTemplate($config['template']['table']);
+        $this->setTemplateFields($config['template']['fields']);
     }
 
     /**
@@ -410,10 +414,10 @@ abstract class AbstractTable
     /**
      * Render the table
      * @return string
-     * @throws \Throwable
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws Throwable
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function render()
     {
@@ -474,7 +478,7 @@ abstract class AbstractTable
 
     /**
      * Get the search form
-     * @return \Symfony\Component\Form\FormView
+     * @return FormView
      */
     public function getSearchForm()
     {

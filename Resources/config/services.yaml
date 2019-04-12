@@ -1,11 +1,26 @@
 services:
-  PLejeune\TableBundle\Service\TableService:
-    public: true
-    class: PLejeune\TableBundle\Service\TableService
-    arguments: ["@service_container"]
-    tags:
-      - { name: twig.extension }
 
-  plejeune.table:
-    public: true
-    alias: PLejeune\TableBundle\Service\TableService
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+
+    PLejeune\TableBundle\Extension\:
+        resource: '../../Extension'
+        tags:
+            - { name: twig.extension }
+
+    PLejeune\TableBundle\Service\TableService:
+        public: true
+        class: PLejeune\TableBundle\Service\TableService
+
+    plejeune.table:
+        public: true
+        alias: PLejeune\TableBundle\Service\TableService
+
+    _instanceof:
+        PLejeune\TableBundle\Definition\AbstractTable:
+            public: true
+            calls:
+                - [setConfig, ['%plejeune.table.config%']]

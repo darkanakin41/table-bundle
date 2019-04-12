@@ -1,4 +1,5 @@
 <?php
+
 namespace PLejeune\TableBundle\Fields;
 
 
@@ -30,6 +31,7 @@ class IntegrationField extends Field
 
     /**
      * @param string $prefix
+     *
      * @return IntegrationField
      */
     public function setPrefix(string $prefix): IntegrationField

@@ -2,6 +2,7 @@
 
 namespace PLejeune\TableBundle\Fields;
 
+use Exception;
 use PLejeune\TableBundle\Definition\Field;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 
@@ -45,12 +46,12 @@ class ActionField extends Field
     /**
      * @param string $attribute
      *
-     * @return ActionField
+     * @param string $value
+     * @return void
      */
-    public function addAttribute($attribute): ActionField
+    public function addAttribute($attribute, $value): void
     {
-        $this->attributes[] = $attribute;
-        return $this;
+        $this->attributes[$attribute] = $value;
     }
 
     /**
@@ -72,11 +73,22 @@ class ActionField extends Field
         return $this;
     }
 
+    /**
+     * Retrieve the attribute value from the item
+     *
+     * @param $attribute
+     * @param $item
+     *
+     * @return mixed
+     * @throws Exception
+     */
     public function buildAttribute($attribute, $item){
-        if(!isset($this->attributes[$attribute])) throw new \Exception("Attribute not found");
+        if(!isset($this->attributes[$attribute])){
+            throw new Exception("Attribute not found");
+        }
         $converter = new CamelCaseToSnakeCaseNameConverter();
 
-        $value = call_user_func(array($item, "get" . $converter->denormalize($this->getField())));
+        $value = call_user_func([$item, "get" . ucfirst($converter->denormalize($this->getField()))]);
         return str_ireplace('{' . $this->getField() . '}', $value, $this->attributes[$attribute]);
     }
 

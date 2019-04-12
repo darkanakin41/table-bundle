@@ -61,29 +61,12 @@ class URLField extends Field
 
     /**
      * @param mixed $route
+     *
      * @return URLField
      */
     public function setRoute($route)
     {
         $this->route = $route;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getRouteParams()
-    {
-        return $this->routeParams;
-    }
-
-    /**
-     * @param mixed $routeParams
-     * @return URLField
-     */
-    public function setRouteParams($routeParams)
-    {
-        $this->routeParams = $routeParams;
         return $this;
     }
 
@@ -97,6 +80,7 @@ class URLField extends Field
 
     /**
      * @param string $target
+     *
      * @return URLField
      */
     public function setTarget(string $target): URLField
@@ -127,24 +111,6 @@ class URLField extends Field
     /**
      * @return mixed
      */
-    public function getLink()
-    {
-        return $this->link;
-    }
-
-    /**
-     * @param mixed $link
-     * @return URLField
-     */
-    public function setLink($link)
-    {
-        $this->link = $link;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getLinkLabel()
     {
         return $this->linkLabel;
@@ -158,25 +124,6 @@ class URLField extends Field
     public function setLinkLabel($linkLabel)
     {
         $this->linkLabel = $linkLabel;
-        return $this;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getLinkParams(): array
-    {
-        return $this->linkParams;
-    }
-
-    /**
-     * @param string[] $linkParams
-     *
-     * @return URLField
-     */
-    public function setLinkParams(array $linkParams): URLField
-    {
-        $this->linkParams = $linkParams;
         return $this;
     }
 
@@ -204,22 +151,59 @@ class URLField extends Field
         $this->linkClasses[] = $linkClass;
     }
 
-
-    public function buildLink($item){
+    public function buildLink($item)
+    {
         $converter = new CamelCaseToSnakeCaseNameConverter();
 
-        if(empty($this->getLink())){
+        if (empty($this->getLink())) {
             return null;
         }
         $link = $this->getLink();
-        foreach($this->getLinkParams() as $key => $field){
-            $value = call_user_func(array($item, "get" . $converter->denormalize($field)));
+        foreach ($this->getLinkParams() as $key => $field) {
+            $value = call_user_func(array($item, "get".ucfirst($converter->denormalize($field))));
             $link = str_ireplace($key, $value, $link);
         }
 
         return $link;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getLink()
+    {
+        return $this->link;
+    }
+
+    /**
+     * @param mixed $link
+     *
+     * @return URLField
+     */
+    public function setLink($link)
+    {
+        $this->link = $link;
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getLinkParams(): array
+    {
+        return $this->linkParams;
+    }
+
+    /**
+     * @param string[] $linkParams
+     *
+     * @return URLField
+     */
+    public function setLinkParams(array $linkParams): URLField
+    {
+        $this->linkParams = $linkParams;
+        return $this;
+    }
 
     public function getCalculatedParams($item)
     {
@@ -231,6 +215,25 @@ class URLField extends Field
         }
 
         return $return;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRouteParams()
+    {
+        return $this->routeParams;
+    }
+
+    /**
+     * @param mixed $routeParams
+     *
+     * @return URLField
+     */
+    public function setRouteParams($routeParams)
+    {
+        $this->routeParams = $routeParams;
+        return $this;
     }
 
 }
