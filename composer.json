@@ -3,7 +3,8 @@
     "type": "symfony-bundle",
     "description": "Pierre LEJEUNE TableBundle",
     "keywords": [
-        "Table Bundle"
+        "Table Bundle",
+        "Symfony"
     ],
     "homepage": "https://gitlab.com/pierrelejeune/tablebundle",
     "license": "MIT",
