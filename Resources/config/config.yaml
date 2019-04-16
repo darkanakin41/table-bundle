@@ -1,3 +1,3 @@
 template:
-    fields: '@PLejeuneTable/fields.html.twig'
-    table: '@PLejeuneTable/table.html.twig'
+    fields: '@PLejeuneTable/foundation/fields.html.twig'
+    table: '@PLejeuneTable/foundation/table.html.twig'
