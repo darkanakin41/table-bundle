@@ -1,5 +1,5 @@
 # plejeune/table-bundle
-This bundle is designed to give grant functionnalities to create simple table based on entities.
+This bundle is designed to grant functionnalities to create simple table based on entities.
 
 Current available template : 
 * [Foundation](https://foundation.zurb.com/)
