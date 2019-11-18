@@ -25,7 +25,7 @@ composer require darkanakin41/table-bundle
 ## Configuration 
 Configuration is, at the moment, rather basic : 
 ```yaml
-p_lejeune_table:
+darkanakin41_table:
     template:
         # Select the template for all fields
         fields: '@Darkanakin41Table/foundation/fields.html.twig'
@@ -40,7 +40,7 @@ Then, you'll have to override method ```public function __init__() ``` in order 
 
 Next, you'll need to pass the table to the view and in the template, use a twig extension from the bundle to display it : 
 ```twig
-{{ table_render(table) }}
+{{ darkanakin41_table_render(table) }}
 ```
 
 ## TODO 

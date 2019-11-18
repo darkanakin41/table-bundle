@@ -29,8 +29,8 @@ class TableExtension extends AbstractExtension
     public function getFunctions()
     {
         return array(
-            new TwigFunction('table_render', [$this, 'render'], ['is_safe' => ['html']]),
-            new TwigFunction('table_render_field', [$this, 'renderField'], ['is_safe' => ['html']]),
+            new TwigFunction('darkanakin41_table_render', [$this, 'render'], ['is_safe' => ['html']]),
+            new TwigFunction('darkanakin41_table_render_field', [$this, 'renderField'], ['is_safe' => ['html']]),
         );
     }
 

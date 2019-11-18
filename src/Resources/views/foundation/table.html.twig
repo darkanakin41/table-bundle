@@ -102,7 +102,7 @@
                         {% for fieldname in table.fieldsDisplayed %}
                             {% set field = table.field(fieldname) %}
                             <td class="{{ field.classes|join(' ') }}">
-                                {{ table_render_field(table, field, item) }}
+                                {{ darkanakin41_table_render_field(table, field, item) }}
                             </td>
                         {% endfor %}
                     </tr>
