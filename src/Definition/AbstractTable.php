@@ -7,6 +7,8 @@ use Knp\Component\Pager\PaginatorInterface;
 use Darkanakin41\TableBundle\Exception\FieldNotExistException;
 use Darkanakin41\TableBundle\Form\SearchForm;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -145,7 +147,7 @@ abstract class AbstractTable
      */
     private $actions = [];
 
-    public function __construct(PaginatorInterface $paginator, RequestStack $request_stack, RegistryInterface $doctrine, Twig_Environment $twigEnvironment, SessionInterface $session, FormFactoryInterface $formFactory, ParameterBagInterface $parameterBag)
+    public function __construct(PaginatorInterface $paginator, RequestStack $request_stack, RegistryInterface $doctrine, Twig_Environment $twigEnvironment, SessionInterface $session, FormFactoryInterface $formFactory, ContainerInterface $container)
     {
         $this->paginator = $paginator;
         $this->request_stack = $request_stack;
@@ -158,7 +160,7 @@ abstract class AbstractTable
         $this->filters = [];
         $this->sort = [];
 
-        $this->setConfig($parameterBag->get('darkanakin41.table.config'));
+        $this->setConfig($container->getParameter('darkanakin41.table.config'));
 
         $this->setTableClasses([]);
         $this->setActions([]);
