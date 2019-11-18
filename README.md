@@ -1,4 +1,4 @@
-# plejeune/table-bundle
+# darkanakin41/table-bundle
 This bundle is designed to grant functionnalities to create simple table based on entities.
 
 Current available template : 
@@ -16,7 +16,7 @@ First, install dependencies (next chapter)
 Simply import it into your project with composer
 
 ```bash
-composer require plejeune/table-bundle
+composer require darkanakin41/table-bundle
 ```
 
 ## Dependencies
@@ -28,13 +28,13 @@ Configuration is, at the moment, rather basic :
 p_lejeune_table:
     template:
         # Select the template for all fields
-        fields: '@PLejeuneTable/foundation/fields.html.twig'
+        fields: '@Darkanakin41Table/foundation/fields.html.twig'
         # Select the template for all table
-        table: '@PLejeuneTable/foundation/table.html.twig'
+        table: '@Darkanakin41Table/foundation/table.html.twig'
 ```
 
 ## Usage
-In order to use the bundle, you must declare your own Table class which will extends ```PLejeune\TableBundle\Definition\AbstractTable```
+In order to use the bundle, you must declare your own Table class which will extends ```Darkanakin41\TableBundle\Definition\AbstractTable```
 
 Then, you'll have to override method ```public function __init__() ``` in order to define the differents columns you need
 

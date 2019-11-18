@@ -10,7 +10,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="PLejeuneUserBundle test suite">
+        <testsuite name="Darkanakin41UserBundle test suite">
             <directory suffix="Test.php">./Tests</directory>
         </testsuite>
     </testsuites>

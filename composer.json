@@ -1,17 +1,17 @@
 {
-    "name": "plejeune/table-bundle",
+    "name": "darkanakin41/table-bundle",
     "type": "symfony-bundle",
     "description": "Pierre LEJEUNE TableBundle",
     "keywords": [
         "Table Bundle",
         "Symfony"
     ],
-    "homepage": "https://gitlab.com/pierrelejeune/tablebundle",
+    "homepage": "https://github.com/darkanakin41/table-bundle",
     "license": "MIT",
     "authors": [
         {
             "name": "Pierre LEJEUNE",
-            "email": "lejeune.pierre.41@gmail.com"
+            "email": "darkanakin41@gmail.com"
         }
     ],
     "require": {
@@ -34,22 +34,14 @@
     "config": {
         "sort-packages": true
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0"
-        }
-    },
     "autoload": {
         "psr-4": {
-            "PLejeune\\TableBundle\\": ""
-        },
-        "exclude-from-classmap": [
-            "/Tests/"
-        ]
+            "Darkanakin41\\TableBundle\\": "src/"
+        }
     },
     "autoload-dev": {
         "psr-4": {
-            "PLejeune\\TableBundle\\Tests\\": "/Tests/"
+            "Darkanakin41\\CoreBundle\\Tests\\": "tests/"
         }
     }
 }

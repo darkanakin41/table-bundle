@@ -1,3 +1,0 @@
-template:
-    fields: '@PLejeuneTable/foundation/fields.html.twig'
-    table: '@PLejeuneTable/foundation/table.html.twig'

@@ -1,0 +1,24 @@
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+
+    Darkanakin41\TableBundle\Extension\:
+        resource: '../../Extension'
+        tags:
+            - { name: twig.extension }
+
+    Darkanakin41\TableBundle\Service\TableService:
+        public: true
+        class: Darkanakin41\TableBundle\Service\TableService
+
+    darkanakin41.table:
+        public: true
+        alias: Darkanakin41\TableBundle\Service\TableService
+
+    _instanceof:
+        Darkanakin41\TableBundle\Definition\AbstractTable:
+            public: true
