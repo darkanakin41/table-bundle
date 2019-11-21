@@ -223,7 +223,7 @@ abstract class AbstractTable
      *
      * @return AbstractTable
      */
-    protected function setFieldsDisplayedDefault(array $fields_displayed_default): AbstractTable
+    public function setFieldsDisplayedDefault(array $fields_displayed_default): AbstractTable
     {
         $this->fields_displayed_default = $fields_displayed_default;
         return $this;
