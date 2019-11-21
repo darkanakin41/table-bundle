@@ -177,12 +177,8 @@ abstract class AbstractTable
         if (empty($this->getSessionAttribute(self::FIELDS_DISPLAYED))) {
             $this->setSessionAttribute(self::FIELDS_DISPLAYED, $this->getFieldsDisplayedDefault());
         }
-        $this->handleRequest();
 
         $this->setFieldsDisplayed($this->getSessionAttribute(self::FIELDS_DISPLAYED));
-
-        $this->generateSearchForm();
-        $this->generate();
     }
 
     private function setConfig(array $config)
@@ -630,6 +626,11 @@ abstract class AbstractTable
      */
     public function render()
     {
+        $this->handleRequest();
+
+        $this->generateSearchForm();
+        $this->generate();
+
         $template = $this->twig->load($this->getTemplate());
         return $template->renderBlock("table", array('table' => $this));
     }
@@ -673,15 +674,15 @@ abstract class AbstractTable
             if (is_iterable($tmp)) {
                 return $tmp;
             }
-            if (method_exists($tmp, "is".$converter->denormalize($field->getField()))) {
+            if (method_exists($tmp, "is" . $converter->denormalize($field->getField()))) {
                 $prefix = "is";
             }
-            $value = call_user_func(array($tmp, $prefix.$converter->denormalize($field->getField())));
+            $value = call_user_func(array($tmp, $prefix . $converter->denormalize($field->getField())));
         } else {
-            if (method_exists($object, "is".$converter->denormalize($field->getField()))) {
+            if (method_exists($object, "is" . $converter->denormalize($field->getField()))) {
                 $prefix = "is";
             }
-            $value = call_user_func(array($object, $prefix.$converter->denormalize($field->getField())));
+            $value = call_user_func(array($object, $prefix . $converter->denormalize($field->getField())));
         }
         return $value;
     }
