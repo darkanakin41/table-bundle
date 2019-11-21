@@ -211,6 +211,9 @@ class URLField extends Field
         foreach ($this->getRouteParams() as $key => $fieldname) {
             $field = $this->getTable()->getField($fieldname);
             $value = $this->getTable()->getValue($item, $field);
+            if(is_object($value) && method_exists($value, 'getId')){
+                $value = $value->getId();
+            }
             $return[$key] = $value;
         }
 
