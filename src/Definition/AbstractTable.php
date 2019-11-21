@@ -484,6 +484,13 @@ abstract class AbstractTable
     {
         $this->getField($id);
         unset($this->fields[$id]);
+
+        if($this->fields_displayed !== null){
+            $position = array_search($id, $this->fields_displayed);
+            if($position !== false){
+                unset($this->fields_displayed[$position]);
+            }
+        }
     }
 
     /**
