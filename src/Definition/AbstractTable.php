@@ -830,7 +830,7 @@ abstract class AbstractTable
      *
      * @return AbstractTable
      */
-    protected function setDefaultSort(array $sort)
+    public function setDefaultSort(array $sort)
     {
         $this->sort = $sort;
         return $this;
