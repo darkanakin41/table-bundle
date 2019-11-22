@@ -1,5 +1,7 @@
 {% block raw %}
-    {% set value = table.value(item,field) %}
+    {% if value is not defined %}
+        {% set value = table.value(item,field) %}
+    {% endif %}
     {% if field.valueToLabels is not empty %}
         {% set value = field.valueToLabel(value) %}
     {% endif %}
@@ -30,7 +32,7 @@
 {% endblock %}
 
 {% block array %}
-    {% for a_item in table.value(item,field) %}{% if not loop.first %}, {% endif %}{{ block(field.subBlock) }}{% endfor %}
+    {% for value in table.value(item,field) %}{% if not loop.first %}, {% endif %}{{ block(field.subBlock) }}{% endfor %}
 {% endblock %}
 
 {% block count %}
