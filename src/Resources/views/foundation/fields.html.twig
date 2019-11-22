@@ -30,7 +30,7 @@
 {% endblock %}
 
 {% block array %}
-    {% for a_item in table.value(item,field) %}{% if not loop.first %}, {% endif %}{{ a_item }}{% endfor %}
+    {% for a_item in table.value(item,field) %}{% if not loop.first %}, {% endif %}{{ block(field.subBlock) }}{% endfor %}
 {% endblock %}
 
 {% block count %}
