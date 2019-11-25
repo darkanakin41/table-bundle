@@ -238,15 +238,22 @@ abstract class AbstractTable
         switch ($action) {
             case "remove_field" :
                 $field = $current_request->query->get("field", NULL);
-                if ($field === NULL) break;
+                if ($field === NULL){
+                    break;
+                }
                 $fields = $this->getSessionAttribute(self::FIELDS_DISPLAYED);
-                if (($key = array_search($field, $fields)) !== FALSE) unset($fields[$key]);
+                if (($key = array_search($field, $fields)) !== FALSE) {
+                    unset($fields[$key]);
+                }
                 $this->setSessionAttribute(self::FIELDS_DISPLAYED, $fields);
+                $this->setFieldsDisplayed($fields);
                 $current_request->query->remove("field");
                 break;
             case "add_field":
                 $field = $current_request->get("field", NULL);
-                if ($field === NULL) break;
+                if ($field === NULL){
+                    break;
+                }
                 $old_fields = $this->getSessionAttribute(self::FIELDS_DISPLAYED);
                 if (array_search($field, $old_fields) === FALSE) {
                     $new_fields = array();
@@ -261,6 +268,7 @@ abstract class AbstractTable
                     $new_fields = $old_fields;
                 }
                 $this->setSessionAttribute(self::FIELDS_DISPLAYED, $new_fields);
+                $this->setFieldsDisplayed($new_fields);
                 $current_request->query->remove("field");
                 break;
             case "reset_field":
