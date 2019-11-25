@@ -3,6 +3,7 @@
 namespace Darkanakin41\TableBundle\Definition;
 
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Knp\Component\Pager\PaginatorInterface;
 use Darkanakin41\TableBundle\Exception\FieldNotExistException;
 use Darkanakin41\TableBundle\Form\SearchForm;
@@ -309,6 +310,8 @@ abstract class AbstractTable
 
         $qb = $this->doctrine->getRepository($this->getClass())->createQueryBuilder($alias);
 
+        $this->addCustomQueryPart($qb);
+
         foreach ($this->getJointures() as $jointure) {
             $qb->leftJoin($jointure->getDQL($alias), strtolower($jointure->getId()))->addSelect(strtolower($jointure->getId()));
         }
@@ -329,6 +332,14 @@ abstract class AbstractTable
         }
 
         return $qb->getQuery();
+    }
+
+    /**
+     * Allow the developper to add a Custom part to the query
+     * @param QueryBuilder $qb
+     */
+    protected function addCustomQueryPart(QueryBuilder $qb){
+
     }
 
     /**
