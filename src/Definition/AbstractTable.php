@@ -246,7 +246,6 @@ abstract class AbstractTable
                     unset($fields[$key]);
                 }
                 $this->setSessionAttribute(self::FIELDS_DISPLAYED, $fields);
-                $this->setFieldsDisplayed($fields);
                 $current_request->query->remove("field");
                 break;
             case "add_field":
@@ -268,13 +267,14 @@ abstract class AbstractTable
                     $new_fields = $old_fields;
                 }
                 $this->setSessionAttribute(self::FIELDS_DISPLAYED, $new_fields);
-                $this->setFieldsDisplayed($new_fields);
                 $current_request->query->remove("field");
                 break;
             case "reset_field":
                 $this->setSessionAttribute(self::FIELDS_DISPLAYED, $this->getFieldsDisplayedDefault());
                 break;
         }
+
+        $this->setFieldsDisplayed($this->getSessionAttribute(self::FIELDS_DISPLAYED));
 
         $current_request->query->remove("action");
     }
