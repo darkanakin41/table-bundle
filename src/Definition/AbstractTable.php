@@ -336,9 +336,10 @@ abstract class AbstractTable
 
     /**
      * Allow the developper to add a Custom part to the query
-     * @param QueryBuilder $qb
+     * @param QueryBuilder $qb the query builder to update
+     * @param string $alias the base alias
      */
-    protected function addCustomQueryPart(QueryBuilder $qb){
+    protected function addCustomQueryPart(QueryBuilder $qb, string $alias){
 
     }
 

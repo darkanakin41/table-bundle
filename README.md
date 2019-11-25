@@ -46,3 +46,4 @@ Next, you'll need to pass the table to the view and in the template, use a twig 
 ## TODO 
 * Add another way of displaying search form
 * Add template for bootstrap
+* Create a more complete documentation on the table, the fields available and the way of override templates
