@@ -4,7 +4,10 @@
     "description": "Pierre LEJEUNE TableBundle",
     "keywords": [
         "Table Bundle",
-        "Symfony"
+        "symfony",
+        "doctrine",
+        "table",
+        "bundle"
     ],
     "homepage": "https://github.com/darkanakin41/table-bundle",
     "license": "MIT",
