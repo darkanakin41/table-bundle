@@ -1,7 +1,10 @@
 <?php
 
-namespace Darkanakin41\TableBundle\Definition;
+/*
+ * This file is part of the Darkanakin41TableBundle package.
+ */
 
+namespace Darkanakin41\TableBundle\Definition;
 
 class Action
 {
@@ -18,54 +21,42 @@ class Action
      */
     private $routeParam;
     /**
-     * @var boolean
+     * @var bool
      */
     private $translate;
 
     /**
      * Action constructor.
      */
-    public function __construct($label, $route, $routeParam = [])
+    public function __construct($label, $route, $routeParam = array())
     {
         $this->setLabel($label);
         $this->setRoute($route);
         $this->setRouteParam($routeParam);
-        $this->setTranslate(TRUE);
+        $this->setTranslate(true);
     }
 
-    /**
-     * @return string
-     */
     public function getLabel(): string
     {
         return $this->label;
     }
 
-    /**
-     * @param string $label
-     * @return Action
-     */
     public function setLabel(string $label): Action
     {
         $this->label = $label;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getRoute(): string
     {
         return $this->route;
     }
 
-    /**
-     * @param string $route
-     * @return Action
-     */
     public function setRoute(string $route): Action
     {
         $this->route = $route;
+
         return $this;
     }
 
@@ -79,31 +70,23 @@ class Action
 
     /**
      * @param string[] $routeParam
-     * @return Action
      */
     public function setRouteParam(array $routeParam): Action
     {
         $this->routeParam = $routeParam;
+
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isTranslate(): bool
     {
         return $this->translate;
     }
 
-    /**
-     * @param bool $translate
-     * @return Action
-     */
     public function setTranslate(bool $translate): Action
     {
         $this->translate = $translate;
+
         return $this;
     }
-
-
 }

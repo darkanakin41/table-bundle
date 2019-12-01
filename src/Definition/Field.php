@@ -1,7 +1,10 @@
 <?php
 
-namespace Darkanakin41\TableBundle\Definition;
+/*
+ * This file is part of the Darkanakin41TableBundle package.
+ */
 
+namespace Darkanakin41\TableBundle\Definition;
 
 class Field
 {
@@ -48,7 +51,7 @@ class Field
     private $classes;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $numeric;
 
@@ -58,7 +61,7 @@ class Field
     private $value_to_label;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $translation;
     /**
@@ -70,19 +73,19 @@ class Field
      */
     private $table;
 
-    public function __construct($field, $label = NULL, $id = NULL)
+    public function __construct($field, $label = null, $id = null)
     {
         $this->setField($field);
         $this->setId(is_null($id) ? $this->getField() : $id);
         $this->setLabel(is_null($label) ? $this->getField() : $label);
-        $this->setBlock("raw");
-        $this->setFilterable(TRUE);
-        $this->setChoice(FALSE);
-        $this->setSortable(TRUE);
-        $this->setVisible(TRUE);
-        $this->setClasses([]);
-        $this->setNumeric(FALSE);
-        $this->setTranslation(FALSE);
+        $this->setBlock('raw');
+        $this->setFilterable(true);
+        $this->setChoice(false);
+        $this->setSortable(true);
+        $this->setVisible(true);
+        $this->setClasses(array());
+        $this->setNumeric(false);
+        $this->setTranslation(false);
     }
 
     /**
@@ -93,16 +96,12 @@ class Field
         return $this->table;
     }
 
-    /**
-     * @param AbstractTable $table
-     * @return Field
-     */
     public function setTable(AbstractTable $table): Field
     {
         $this->table = $table;
+
         return $this;
     }
-
 
     /**
      * @return mixed
@@ -114,45 +113,42 @@ class Field
 
     /**
      * @param mixed $labels
+     *
      * @return self
      */
     public function setValueToLabels(array $labels)
     {
         $this->value_to_label = array_change_key_case($labels, CASE_LOWER);
+
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isTranslation(): bool
     {
         return $this->translation;
     }
 
-    /**
-     * @param bool $translation
-     * @return Field
-     */
     public function setTranslation(bool $translation): Field
     {
         $this->translation = $translation;
+
         return $this;
     }
 
     /**
      * @param string $key
+     *
      * @return string
      */
     public function getValueToLabel($key)
     {
-        if($key === null) return "#N/C";
-        return isset($this->value_to_label[$key]) ? $this->value_to_label[$key] : "unknown_value";
+        if (null === $key) {
+            return '#N/C';
+        }
+
+        return isset($this->value_to_label[$key]) ? $this->value_to_label[$key] : 'unknown_value';
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id;
@@ -166,26 +162,20 @@ class Field
         return $this->translation_prefix;
     }
 
-    /**
-     * @param string $translation_prefix
-     * @return Field
-     */
     public function setTranslationPrefix(string $translation_prefix): Field
     {
         if (!empty($translation_prefix)) {
-            $this->setTranslation(TRUE);
+            $this->setTranslation(true);
         }
         $this->translation_prefix = $translation_prefix;
+
         return $this;
     }
 
-    /**
-     * @param string $id
-     * @return Field
-     */
     public function setId(string $id): Field
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -197,31 +187,22 @@ class Field
         return $this->label;
     }
 
-    /**
-     * @param string $label
-     * @return Field
-     */
     public function setLabel(string $label): Field
     {
         $this->label = $label;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getField(): string
     {
         return $this->field;
     }
 
-    /**
-     * @param string $field
-     * @return Field
-     */
     public function setField(string $field): Field
     {
         $this->field = $field;
+
         return $this;
     }
 
@@ -235,14 +216,14 @@ class Field
 
     /**
      * @param Jointure $jointure
-     * @return Field
      */
     public function setJointure(?Jointure $jointure): Field
     {
         if (!is_null($jointure)) {
             $this->jointure = $jointure;
-            $this->setSortable(FALSE);
+            $this->setSortable(false);
         }
+
         return $this;
     }
 
@@ -254,96 +235,65 @@ class Field
         return $this->block;
     }
 
-    /**
-     * @return bool
-     */
     public function isFilterable(): bool
     {
         return $this->filterable;
     }
 
-    /**
-     * @param bool $filterable
-     * @return Field
-     */
     public function setFilterable(bool $filterable): Field
     {
         $this->filterable = $filterable;
+
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isChoice(): bool
     {
         return $this->choice;
     }
 
-    /**
-     * @param bool $choice
-     * @return Field
-     */
     public function setChoice(bool $choice): Field
     {
         $this->choice = $choice;
+
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isSortable(): bool
     {
         return $this->sortable;
     }
 
-    /**
-     * @param bool $sortable
-     * @return Field
-     */
     public function setSortable(bool $sortable): Field
     {
         $this->sortable = $sortable;
+
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isVisible(): bool
     {
         return $this->visible;
     }
 
-    /**
-     * @param bool $visible
-     * @return Field
-     */
     public function setVisible(bool $visible): Field
     {
         $this->visible = $visible;
+
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isNumeric(): bool
     {
         return $this->numeric;
     }
 
-    /**
-     * @param bool $numeric
-     * @return Field
-     */
     public function setNumeric(bool $numeric): Field
     {
         $this->numeric = $numeric;
+
         return $this;
     }
-
 
     /**
      * @return string[]
@@ -355,46 +305,45 @@ class Field
 
     /**
      * @param string[] $classes
-     * @return Field
      */
     public function setClasses(array $classes): Field
     {
         $this->classes = $classes;
+
         return $this;
     }
 
-    /**
-     * @param string $classe
-     */
     public function addClasse(string $classe)
     {
         $this->classes[] = $classe;
     }
 
     /**
-     * Generate DQL
+     * Generate DQL.
+     *
      * @param string $default
+     *
      * @return string
      */
-    public function getDQL($default = "")
+    public function getDQL($default = '')
     {
         if (!is_null($this->getJointure())) {
-            return strtolower($this->getJointure()->getId()) . "." . $this->getField();
+            return strtolower($this->getJointure()->getId()).'.'.$this->getField();
         }
-        return $default . "." . $this->getField();
+
+        return $default.'.'.$this->getField();
     }
 
     /**
-     * @param AbstractTable $table
      * @return string
      */
     public function getQBFilter(AbstractTable $table)
     {
         if ($this->isChoice()) {
-            return $this->getDQL($table->getAlias()) . ' = :' . $this->getId();
+            return $this->getDQL($table->getAlias()).' = :'.$this->getId();
         }
 
-        return $this->getDQL($table->getAlias()) . ' LIKE :' . $this->getId();
+        return $this->getDQL($table->getAlias()).' LIKE :'.$this->getId();
     }
 
     public function getValue($item)
@@ -403,13 +352,12 @@ class Field
     }
 
     /**
-     * Set the block of the field to display
-     * @param string $block
-     * @return Field
+     * Set the block of the field to display.
      */
     protected function setBlock(string $block): Field
     {
         $this->block = $block;
+
         return $this;
     }
 }

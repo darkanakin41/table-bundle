@@ -1,7 +1,10 @@
 <?php
 
-namespace Darkanakin41\TableBundle\DependencyInjection;
+/*
+ * This file is part of the Darkanakin41TableBundle package.
+ */
 
+namespace Darkanakin41\TableBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -34,7 +37,7 @@ class Darkanakin41TableExtension extends Extension
             return;
         }
 
-        $container->prependExtensionConfig('twig', array('paths' => array(__DIR__.'/../Resources/views' => "Darkanakin41Table")));
+        $container->prependExtensionConfig('twig', array('paths' => array(__DIR__.'/../Resources/views' => 'Darkanakin41Table')));
     }
 
     private function arrayMergeRecursiveDistinct(array &$array1, array &$array2)
@@ -44,7 +47,7 @@ class Darkanakin41TableExtension extends Extension
         foreach ($array2 as $key => &$value) {
             if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
                 $merged[$key] = $this->arrayMergeRecursiveDistinct($merged[$key], $value);
-            }elseif(!isset($merged[$key])) {
+            } elseif (!isset($merged[$key])) {
                 $merged[$key] = $value;
             }
         }

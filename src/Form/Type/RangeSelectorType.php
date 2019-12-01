@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * This file is part of the Darkanakin41TableBundle package.
+ */
+
 namespace Darkanakin41\TableBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -11,25 +15,24 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RangeSelectorType extends AbstractType
 {
-
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('min', HiddenType::class, array(
-            'required' => TRUE,
-            'label' => FALSE,
+            'required' => true,
+            'label' => false,
             'attr' => array(
-                'readonly' => ''
-            )
+                'readonly' => '',
+            ),
         ));
         $builder->add('max', HiddenType::class, array(
-            'required' => TRUE,
-            'label' => FALSE,
+            'required' => true,
+            'label' => false,
             'attr' => array(
-                'readonly' => ''
-            )
+                'readonly' => '',
+            ),
         ));
     }
 

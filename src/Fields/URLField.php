@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * This file is part of the Darkanakin41TableBundle package.
+ */
+
 namespace Darkanakin41\TableBundle\Fields;
 
 use Darkanakin41\TableBundle\Definition\Field;
@@ -40,16 +44,15 @@ class URLField extends Field
      */
     private $linkClasses;
 
-    public function __construct($field, $label = NULL, $id = NULL)
+    public function __construct($field, $label = null, $id = null)
     {
         parent::__construct($field, $label, $id);
-        $this->setBlock("URL");
-        $this->setTarget("");
-        $this->setSubBlock("raw");
+        $this->setBlock('URL');
+        $this->setTarget('');
+        $this->setSubBlock('raw');
         $this->setFilterable(false);
-        $this->setLinkClasses([]);
+        $this->setLinkClasses(array());
     }
-
 
     /**
      * @return mixed
@@ -67,25 +70,19 @@ class URLField extends Field
     public function setRoute($route)
     {
         $this->route = $route;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTarget(): string
     {
         return $this->target;
     }
 
-    /**
-     * @param string $target
-     *
-     * @return URLField
-     */
     public function setTarget(string $target): URLField
     {
         $this->target = $target;
+
         return $this;
     }
 
@@ -105,6 +102,7 @@ class URLField extends Field
     public function setSubBlock($subBlock)
     {
         $this->subBlock = $subBlock;
+
         return $this;
     }
 
@@ -124,20 +122,15 @@ class URLField extends Field
     public function setLinkLabel($linkLabel)
     {
         $this->linkLabel = $linkLabel;
+
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getLinkClasses(): array
     {
         return $this->linkClasses;
     }
 
-    /**
-     * @param array $linkClasses
-     */
     public function setLinkClasses(array $linkClasses): void
     {
         $this->linkClasses = $linkClasses;
@@ -160,7 +153,7 @@ class URLField extends Field
         }
         $link = $this->getLink();
         foreach ($this->getLinkParams() as $key => $field) {
-            $value = call_user_func(array($item, "get".ucfirst($converter->denormalize($field))));
+            $value = call_user_func(array($item, 'get'.ucfirst($converter->denormalize($field))));
             $link = str_ireplace($key, $value, $link);
         }
 
@@ -183,6 +176,7 @@ class URLField extends Field
     public function setLink($link)
     {
         $this->link = $link;
+
         return $this;
     }
 
@@ -196,12 +190,11 @@ class URLField extends Field
 
     /**
      * @param string[] $linkParams
-     *
-     * @return URLField
      */
     public function setLinkParams(array $linkParams): URLField
     {
         $this->linkParams = $linkParams;
+
         return $this;
     }
 
@@ -211,7 +204,7 @@ class URLField extends Field
         foreach ($this->getRouteParams() as $key => $fieldname) {
             $field = $this->getTable()->getField($fieldname);
             $value = $this->getTable()->getValue($item, $field);
-            if(is_object($value) && method_exists($value, 'getId')){
+            if (is_object($value) && method_exists($value, 'getId')) {
                 $value = $value->getId();
             }
             $return[$key] = $value;
@@ -236,7 +229,7 @@ class URLField extends Field
     public function setRouteParams($routeParams)
     {
         $this->routeParams = $routeParams;
+
         return $this;
     }
-
 }

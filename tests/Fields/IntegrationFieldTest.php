@@ -5,7 +5,7 @@ namespace Darkanakin41\TableBundle\Tests\Fields;
 
 use Darkanakin41\TableBundle\Fields\ImageField;
 use Darkanakin41\TableBundle\Fields\IntegrationField;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class IntegrationFieldTest extends TestCase
 {

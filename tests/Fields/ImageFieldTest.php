@@ -4,7 +4,7 @@
 namespace Darkanakin41\TableBundle\Tests\Fields;
 
 use Darkanakin41\TableBundle\Fields\ImageField;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ImageFieldTest extends TestCase
 {

@@ -1,6 +1,10 @@
 <?php
-namespace Darkanakin41\TableBundle\Definition;
 
+/*
+ * This file is part of the Darkanakin41TableBundle package.
+ */
+
+namespace Darkanakin41\TableBundle\Definition;
 
 class Jointure
 {
@@ -68,9 +72,6 @@ class Jointure
         return $this->parent;
     }
 
-    /**
-     * @param Jointure $parent
-     */
     public function setParent(Jointure $parent)
     {
         $this->parent = $parent;
@@ -86,11 +87,13 @@ class Jointure
 
     /**
      * @param mixed $class
+     *
      * @return Jointure
      */
     public function setClass($class)
     {
         $this->class = $class;
+
         return $this;
     }
 
@@ -99,11 +102,12 @@ class Jointure
      *
      * @return string
      */
-    public function getDQL($default = ""){
-        if($this->getParent() !== null){
-            return $this->getParent()->getId() . "." . $this->getField();
+    public function getDQL($default = '')
+    {
+        if (null !== $this->getParent()) {
+            return $this->getParent()->getId().'.'.$this->getField();
         }
-        return $default . "." . $this->getField();
-    }
 
+        return $default.'.'.$this->getField();
+    }
 }

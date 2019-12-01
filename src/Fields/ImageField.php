@@ -1,29 +1,33 @@
 <?php
 
-namespace Darkanakin41\TableBundle\Fields;
+/*
+ * This file is part of the Darkanakin41TableBundle package.
+ */
 
+namespace Darkanakin41\TableBundle\Fields;
 
 use Darkanakin41\TableBundle\Definition\Field;
 
 class ImageField extends Field
 {
     /**
-     * @var boolean
+     * @var bool
      */
     private $displayed;
 
-    public function __construct($field, $label = NULL, $id = NULL)
+    public function __construct($field, $label = null, $id = null)
     {
         parent::__construct($field, $label, $id);
-        $this->addClasse("text-center");
-        $this->setBlock("image");
-        $this->setDisplayed(TRUE);
-        $this->setFilterable(FALSE);
+        $this->addClasse('text-center');
+        $this->setBlock('image');
+        $this->setDisplayed(true);
+        $this->setFilterable(false);
     }
 
     /**
      * @deprecated use isDisplayed instead
-     * @return boolean
+     *
+     * @return bool
      */
     public function getDisplayed()
     {
@@ -31,7 +35,7 @@ class ImageField extends Field
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isDisplayed()
     {
@@ -46,8 +50,7 @@ class ImageField extends Field
     public function setDisplayed($displayed)
     {
         $this->displayed = $displayed;
+
         return $this;
     }
-
-
 }

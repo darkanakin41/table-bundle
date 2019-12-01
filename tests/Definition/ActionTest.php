@@ -5,7 +5,7 @@ namespace Darkanakin41\TableBundle\Tests\Definition;
 
 
 use Darkanakin41\TableBundle\Definition\Action;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ActionTest extends TestCase
 {

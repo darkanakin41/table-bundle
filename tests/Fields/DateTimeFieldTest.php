@@ -6,7 +6,7 @@ namespace Darkanakin41\TableBundle\Tests\Fields;
 use Darkanakin41\TableBundle\Fields\BooleanField;
 use Darkanakin41\TableBundle\Fields\CountryField;
 use Darkanakin41\TableBundle\Fields\DateTimeField;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraints\Country;
 
 class DateTimeFieldTest extends TestCase

@@ -1,24 +1,26 @@
 <?php
 
-namespace Darkanakin41\TableBundle\Fields;
+/*
+ * This file is part of the Darkanakin41TableBundle package.
+ */
 
+namespace Darkanakin41\TableBundle\Fields;
 
 use Darkanakin41\TableBundle\Definition\Field;
 
 class IntegrationField extends Field
 {
-
     /**
      * @var string
      */
     private $prefix;
 
-    public function __construct($field, $label = NULL, $id = NULL)
+    public function __construct($field, $label = null, $id = null)
     {
         parent::__construct($field, $label, $id);
-        $this->setBlock("integration");
-        $this->setFilterable(FALSE);
-        $this->setSortable(FALSE);
+        $this->setBlock('integration');
+        $this->setFilterable(false);
+        $this->setSortable(false);
     }
 
     /**
@@ -29,16 +31,10 @@ class IntegrationField extends Field
         return $this->prefix;
     }
 
-    /**
-     * @param string $prefix
-     *
-     * @return IntegrationField
-     */
     public function setPrefix(string $prefix): IntegrationField
     {
         $this->prefix = $prefix;
+
         return $this;
     }
-
-
 }

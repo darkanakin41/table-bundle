@@ -6,7 +6,7 @@ namespace Darkanakin41\TableBundle\Tests\Definition;
 
 use Darkanakin41\TableBundle\Definition\Field;
 use Darkanakin41\TableBundle\Definition\Filter;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class FilterTest extends TestCase
 {

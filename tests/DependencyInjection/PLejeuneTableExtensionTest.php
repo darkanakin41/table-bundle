@@ -5,7 +5,7 @@ namespace Darkanakin41\TableBundle\Tests\DependencyInjection;
 
 
 use Darkanakin41\TableBundle\DependencyInjection\Darkanakin41TableExtension;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class Darkanakin41TableExtensionTest extends TestCase

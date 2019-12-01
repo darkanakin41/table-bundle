@@ -1,5 +1,8 @@
 <?php
 
+/*
+ * This file is part of the Darkanakin41TableBundle package.
+ */
 
 namespace Darkanakin41\TableBundle\Extension;
 
@@ -29,17 +32,16 @@ class TableExtension extends AbstractExtension
     public function getFunctions()
     {
         return array(
-            new TwigFunction('darkanakin41_table_render', [$this, 'render'], ['is_safe' => ['html']]),
-            new TwigFunction('darkanakin41_table_render_field', [$this, 'renderField'], ['is_safe' => ['html']]),
+            new TwigFunction('darkanakin41_table_render', array($this, 'render'), array('is_safe' => array('html'))),
+            new TwigFunction('darkanakin41_table_render_field', array($this, 'renderField'), array('is_safe' => array('html'))),
         );
     }
 
     /**
-     * Render the Table
-     *
-     * @param AbstractTable $table
+     * Render the Table.
      *
      * @return string
+     *
      * @throws Throwable
      * @throws LoaderError
      * @throws RuntimeError
@@ -51,21 +53,21 @@ class TableExtension extends AbstractExtension
     }
 
     /**
-     * Render the field
+     * Render the field.
      *
-     * @param AbstractTable $table
-     * @param Field         $field
-     * @param mixed         $item
+     * @param mixed $item
      *
      * @return string
+     *
      * @throws UnknownBlockException
      */
     public function renderField(AbstractTable $table, Field $field, $item)
     {
-        $template = $this->container->get("twig")->load($table->getTemplateFields());
+        $template = $this->container->get('twig')->load($table->getTemplateFields());
         if (!$template->hasBlock($field->getBlock())) {
-            throw new UnknownBlockException("Unknown block");
+            throw new UnknownBlockException('Unknown block');
         }
+
         return $template->renderBlock($field->getBlock(), array('table' => $table, 'field' => $field, 'item' => $item));
     }
 }

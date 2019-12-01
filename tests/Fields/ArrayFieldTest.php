@@ -4,7 +4,7 @@
 namespace Darkanakin41\TableBundle\Tests\Fields;
 
 use Darkanakin41\TableBundle\Fields\ArrayField;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ArrayFieldTest extends TestCase
 {

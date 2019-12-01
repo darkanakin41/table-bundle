@@ -1,19 +1,22 @@
 <?php
 
+/*
+ * This file is part of the Darkanakin41TableBundle package.
+ */
+
 namespace Darkanakin41\TableBundle\Fields;
 
 class MapField extends ArrayField
 {
-
     /**
      * @var string[]
      */
     private $key_values;
 
-    public function __construct($field, $label = NULL, $id = NULL)
+    public function __construct($field, $label = null, $id = null)
     {
         parent::__construct($field, $label, $id);
-        $this->setBlock("map");
+        $this->setBlock('map');
         $this->setFilterable(false);
         $this->setSortable(false);
     }
@@ -33,20 +36,15 @@ class MapField extends ArrayField
                 return $item[$key];
             }
         }
+
         return null;
     }
 
-    /**
-     * @return array
-     */
     public function getKeyValues(): array
     {
         return $this->key_values;
     }
 
-    /**
-     * @param array $key_values
-     */
     public function setKeyValues(array $key_values): void
     {
         $this->key_values = $key_values;

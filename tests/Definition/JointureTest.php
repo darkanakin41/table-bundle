@@ -7,7 +7,7 @@ namespace Darkanakin41\TableBundle\Tests\Definition;
 use Darkanakin41\TableBundle\Definition\Action;
 use Darkanakin41\TableBundle\Definition\Filter;
 use Darkanakin41\TableBundle\Definition\Jointure;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class JointureTest extends TestCase
 {

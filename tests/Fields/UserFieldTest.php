@@ -7,7 +7,7 @@ use Darkanakin41\TableBundle\Fields\MapField;
 use Darkanakin41\TableBundle\Fields\NumberField;
 use Darkanakin41\TableBundle\Fields\StarField;
 use Darkanakin41\TableBundle\Fields\UserField;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class UserFieldTest extends TestCase
 {
