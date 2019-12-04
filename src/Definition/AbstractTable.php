@@ -499,12 +499,29 @@ abstract class AbstractTable
     /**
      * Retrieve the value of the Field.
      *
-     * @param $object
+     * @param object|array $object
      *
      * @return mixed
      */
     public function getValue($object, Field $field)
     {
+        if (is_array($object)) {
+            return $this->getValueFromArray($object, $field);
+        }
+        return $this->getValueFromObject($object, $field);
+    }
+
+    /**
+     * Retrieve the value from the given object
+     *
+     * @param object $object the data object
+     * @param Field  $field
+     *
+     * @return mixed|string
+     */
+    private function getValueFromObject($object, Field $field)
+    {
+
         $prefix = 'get';
         $converter = new CamelCaseToSnakeCaseNameConverter();
         if (!is_null($field->getJointure())) {
@@ -527,6 +544,24 @@ abstract class AbstractTable
         }
 
         return $value;
+    }
+
+    /**
+     * Retrieve the value from the given array
+     *
+     * @param array $array the data array
+     * @param Field $field
+     *
+     * @return mixed|string
+     */
+    private function getValueFromArray($array, Field $field)
+    {
+
+        if (in_array($field->getField(), array_keys($array))) {
+            return $array[$field->getField()];
+        }
+
+        return '';
     }
 
     /**
@@ -792,7 +827,7 @@ abstract class AbstractTable
      *
      * @return Query
      */
-    private function generateQuery()
+    protected function generateQuery()
     {
         $alias = $this->getAlias();
 
