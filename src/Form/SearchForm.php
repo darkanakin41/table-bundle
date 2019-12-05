@@ -10,6 +10,8 @@ use Darkanakin41\TableBundle\Definition\AbstractTable;
 use Darkanakin41\TableBundle\Definition\Field;
 use Darkanakin41\TableBundle\Fields\CountryField;
 use Darkanakin41\TableBundle\Form\Type\RangeSelectorType;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\AbstractType;
@@ -156,8 +158,12 @@ class SearchForm extends AbstractType
             $class = $field->getJointure()->getClass();
         }
 
+        /** @var ObjectManager $manager */
+        $manager = $this->getDoctrine()->getManagerForClass($class);
         $dql = sprintf('SELECT DISTINCT i.%s FROM %s i ORDER BY i.%s ASC', $field->getField(), $class, $field->getField());
-        $query = $this->doctrine->getManager()->createQuery($dql);
+
+        /** @var Query $query */
+        $query = $manager->createQuery($dql);
         $values = $query->getResult();
         $retour = array();
         foreach ($values as $value) {
