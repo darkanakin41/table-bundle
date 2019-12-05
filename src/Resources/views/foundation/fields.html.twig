@@ -9,15 +9,21 @@
         {% set value = (field.translationPrefix ~ value) %}
     {% endif %}
     {% if field.translation %}
-        {{ value|lower|trans }}
+        {{ value|trans }}
     {% else %}
         {{ value }}
     {% endif %}
 {% endblock %}
 
 {% block action %}
-    <button class="button" {% for attribute in field.attributes|keys %}{{ attribute}}="{{ field.buildAttribute(attribute, item) }}" {% endfor %}>
-    {{ field.buttonLabel|trans }}
+    <button class="button" {% for attribute in field.attributes|keys %}{{ attribute }}="{{ field.buildAttribute(attribute, item) }}" {% endfor %}>
+    {% if 'fa-' in field.buttonLabel %}
+        <i class="{{ field.buttonLabel }}"></i>
+    {% elseif field.translation %}
+        {{ value|trans }}
+    {% else %}
+        {{ value }}
+    {% endif %}
     </button>
 {% endblock %}
 
@@ -49,7 +55,7 @@
 {% endblock %}
 
 {% block integration %}
-    <input readonly value='[{{ field.prefix }}={{ table.value(item,field) }}]'/>
+    <input readonly value='[{{ field.prefix }}={{ table.value(item,field) }}]' />
 {% endblock %}
 
 {% block boolean %}
@@ -69,7 +75,7 @@
 {% block image %}
     {% if table.value(item,field) is not null %}
         {% if field.displayed %}
-            <img src="{{ asset(table.value(item,field)) }}" alt="{{ field.label|trans }}" title="{{ field.label|trans }}"/>
+            <img src="{{ asset(table.value(item,field)) }}" alt="{{ field.label|trans }}" title="{{ field.label|trans }}" />
         {% else %}
             <a href="{{ asset(table.value(item,field)) }}" target="_blank">
                 Voir

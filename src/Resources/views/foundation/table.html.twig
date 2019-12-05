@@ -127,38 +127,7 @@
     {% endblock content %}
     {% if table.displayMenu %}
         <div class="reveal {% if table.fields|length > 8 %}large{% endif %}" id="{{ table.alias }}-filters" data-reveal>
-            {% set search_form = table.searchForm %}
-            {{ form_start(search_form) }}
-            <div class="header">
-                <h3 class="title">{{ 'action.search'|trans }}</h3>
-                <button class="close-button" data-close aria-label="Close modal" type="button">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="body">
-                {% if table.fields|length > 8 %}
-                    <div class="grid grid-x grid-padding-x">
-                        {% for field in table.fields if field.filterable %}
-                            <div class="cell medium-6">
-                                {{ form_row(attribute(search_form,field.id)) }}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {% for field in table.fields if field.filterable %}
-                        {{ form_row(attribute(search_form,field.id)) }}
-                    {% endfor %}
-                {% endif %}
-            </div>
-            <div class="footer text-right">
-                <div class="button-group">
-                    <a href="{{ path(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")) }}" class="button warning">
-                        <i class="fa fa-eraser"></i> {{ 'action.reset_filter'|trans }}
-                    </a>
-                    {{ form_widget(search_form.submit) }}
-                </div>
-            </div>
-            {{ form_end(search_form) }}
+            {% include "@Darkanakin41Table/foundation/filters.html.twig" with {'table' : table, 'app' : app} %}
         </div>
     {% endif %}
 {% endblock table %}

@@ -1,0 +1,32 @@
+{% extends "@Darkanakin41Core/foundation/modal.html.twig" %}
+
+{% block title %}{{ 'action.search'|trans }}{% endblock %}
+
+{% set form = table.searchForm %}
+{% set submitButton = form_widget(form.submit) %}
+
+{% block body %}
+    {% if table.fields|length > 8 %}
+        <div class="grid grid-x grid-padding-x">
+            {% for field in table.fields if field.filterable %}
+                <div class="cell medium-6">
+                    {{ form_row(attribute(form,field.id)) }}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        {% for field in table.fields if field.filterable %}
+            {{ form_row(attribute(form,field.id)) }}
+        {% endfor %}
+    {% endif %}
+
+{% endblock body %}
+
+{% block footer %}
+    <div class="button-group">
+        {{ submitButton|raw }}
+        <a href="{{ path(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")) }}" class="button warning">
+            <i class="fa fa-eraser"></i> {{ 'action.reset_filter'|trans }}
+        </a>
+    </div>
+{% endblock footer %}
