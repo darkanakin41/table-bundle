@@ -10,8 +10,8 @@ use Darkanakin41\TableBundle\Definition\AbstractTable;
 use Darkanakin41\TableBundle\Definition\Field;
 use Darkanakin41\TableBundle\Fields\CountryField;
 use Darkanakin41\TableBundle\Form\Type\RangeSelectorType;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\Query;
+use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\AbstractType;
@@ -37,12 +37,15 @@ class SearchForm extends AbstractType
 
     public static function applyToQueryBuilder(FormInterface $form, QueryBuilder $qb, AbstractTable $table)
     {
+        foreach($table->getCustomSearchTypes() as $type){
+            $type->applyToQueryBuilder($form, $qb);
+        }
         foreach ($table->getFields() as $field) {
             if (!$field->isFilterable()) {
                 continue;
             }
-            if (!empty($form->get($field->getId())->getData())) {
-                $value = $form->get($field->getId())->getData();
+            $value = $form->get($field->getId())->getData();
+            if (!empty($value)) {
                 if ($field->isNumeric()) {
                     $qb->andWhere($field->getDQL($table->getAlias()).' BETWEEN :'.$field->getId().'_min AND :'.$field->getId().'_max');
                     $qb->setParameter($field->getId().'_min', $value['min']);
@@ -96,6 +99,9 @@ class SearchForm extends AbstractType
         }
         $this->table = $options['table'];
         $this->doctrine = $options['doctrine'];
+        foreach($this->table->getCustomSearchTypes() as $type){
+            $type->buildFormItem($builder);
+        }
 
         foreach ($this->table->getFields() as $fieldname => $field) {
             if (!$field->isFilterable()) {
@@ -147,6 +153,7 @@ class SearchForm extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setDefault('csrf_protection', false);
         $resolver->setRequired('doctrine');
         $resolver->setRequired('table');
     }
@@ -158,11 +165,8 @@ class SearchForm extends AbstractType
             $class = $field->getJointure()->getClass();
         }
 
-        /** @var ObjectManager $manager */
         $manager = $this->getDoctrine()->getManagerForClass($class);
         $dql = sprintf('SELECT DISTINCT i.%s FROM %s i ORDER BY i.%s ASC', $field->getField(), $class, $field->getField());
-
-        /** @var Query $query */
         $query = $manager->createQuery($dql);
         $values = $query->getResult();
         $retour = array();

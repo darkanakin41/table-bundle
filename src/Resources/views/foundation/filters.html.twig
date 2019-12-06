@@ -1,13 +1,18 @@
 {% extends "@Darkanakin41Core/foundation/modal.html.twig" %}
 
-{% block title %}{{ 'action.search'|trans }}{% endblock %}
-
 {% set form = table.searchForm %}
 {% set submitButton = form_widget(form.submit) %}
 
+{% block title %}{{ 'action.search'|trans }}{% endblock %}
+
 {% block body %}
-    {% if table.fields|length > 8 %}
+    {% if (table.fields|length + table.customSearchTypes|length) > 8 %}
         <div class="grid grid-x grid-padding-x">
+            {% for field in table.customSearchTypes %}
+                <div class="cell medium-6">
+                    {{ form_row(attribute(form,field.id)) }}
+                </div>
+            {% endfor %}
             {% for field in table.fields if field.filterable %}
                 <div class="cell medium-6">
                     {{ form_row(attribute(form,field.id)) }}
@@ -15,6 +20,9 @@
             {% endfor %}
         </div>
     {% else %}
+        {% for field in table.customSearchTypes %}
+            {{ form_row(attribute(form,field.id)) }}
+        {% endfor %}
         {% for field in table.fields if field.filterable %}
             {{ form_row(attribute(form,field.id)) }}
         {% endfor %}

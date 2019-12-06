@@ -83,6 +83,7 @@ class ActionField extends Field
         if (!isset($this->attributes[$attribute])) {
             throw new Exception('Attribute not found');
         }
+
         $converter = new CamelCaseToSnakeCaseNameConverter();
 
         $value = call_user_func(array($item, 'get'.ucfirst($converter->denormalize($this->getField()))));

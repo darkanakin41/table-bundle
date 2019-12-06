@@ -37,12 +37,12 @@ abstract class AbstractTable
     /**
      * @var string[]
      */
-    private $fields_displayed = array();
+    private $fieldsDisplayed = array();
 
     /**
      * @var string[]
      */
-    private $fields_displayed_default = array();
+    private $fieldsDisplayedDefault = array();
 
     /**
      * @var Jointure[]
@@ -67,12 +67,12 @@ abstract class AbstractTable
     /**
      * @var PaginatorInterface
      */
-    private $paginator_calculated;
+    private $paginatorCalculated;
 
     /**
      * @var RequestStack
      */
-    private $request_stack;
+    private $requestStack;
 
     /**
      * @var RegistryInterface
@@ -107,31 +107,31 @@ abstract class AbstractTable
     /**
      * @var Form
      */
-    private $search_form;
+    private $searchForm;
 
     /**
      * @var bool
      */
-    private $display_column_selector;
+    private $displayColumnSelector;
 
     /**
      * @var bool
      */
-    private $display_pagination;
+    private $displayPagination;
 
     /**
      * @var bool
      */
-    private $display_menu;
+    private $displayMenu;
 
     /**
      * @var bool
      */
-    private $display_total_items;
+    private $displayTotalItems;
     /**
      * @var bool
      */
-    private $display_menu_label;
+    private $displayMenuLabel;
 
     /**
      * @var string
@@ -144,11 +144,16 @@ abstract class AbstractTable
     /**
      * @var string[]
      */
-    private $table_classes = array();
+    private $tableClasses = array();
     /**
      * @var Action[]
      */
     private $actions = array();
+
+    /**
+     * @var AbstractCustomSearchType[]
+     */
+    private $customSearchTypes = array();
 
     public function __construct(PaginatorInterface $paginator, RequestStack $request_stack, RegistryInterface $doctrine, Twig_Environment $twigEnvironment, SessionInterface $session, FormFactoryInterface $formFactory, ContainerInterface $container)
     {
@@ -200,11 +205,11 @@ abstract class AbstractTable
     /**
      * Set the default list of displayed fields.
      *
-     * @param string[] $fields_displayed_default
+     * @param string[] $fieldsDisplayedDefault
      */
-    public function setFieldsDisplayedDefault(array $fields_displayed_default): AbstractTable
+    public function setFieldsDisplayedDefault(array $fieldsDisplayedDefault): AbstractTable
     {
-        $this->fields_displayed_default = $fields_displayed_default;
+        $this->fields_displayed_default = $fieldsDisplayedDefault;
 
         return $this;
     }
@@ -276,11 +281,47 @@ abstract class AbstractTable
         return $this->display_menu;
     }
 
-    public function setDisplayMenu(bool $display_menu): AbstractTable
+    /**
+     * @param bool $displayMenu
+     *
+     * @return AbstractTable
+     */
+    public function setDisplayMenu(bool $displayMenu): AbstractTable
     {
-        $this->display_menu = $display_menu;
+        $this->display_menu = $displayMenu;
 
         return $this;
+    }
+
+    /**
+     * Get the list of custom search types
+     * @return AbstractCustomSearchType[]
+     */
+    public function getCustomSearchTypes(): array
+    {
+        return $this->customSearchTypes;
+    }
+
+    /**
+     * Add a custom search type into the search form
+     *
+     * @param AbstractCustomSearchType $customSearchType
+     */
+    public function addCustomSearchType(AbstractCustomSearchType $customSearchType)
+    {
+        $this->customSearchTypes[$customSearchType->getId()] = $customSearchType;
+    }
+
+    /**
+     * Remove the custom search type
+     *
+     * @param string $id the id to remove
+     */
+    public function removeCustomSearchType(string $id)
+    {
+        if (isset($this->customSearchTypes[$id])) {
+            unset($this->customSearchTypes[$id]);
+        }
     }
 
     /**
@@ -292,13 +333,13 @@ abstract class AbstractTable
     }
 
     /**
-     * @param bool $display_menu_label
+     * @param bool $displayMenuLabel
      *
      * @return AbstractTable
      */
-    public function setDisplayMenuLabel($display_menu_label)
+    public function setDisplayMenuLabel($displayMenuLabel)
     {
-        $this->display_menu_label = $display_menu_label;
+        $this->display_menu_label = $displayMenuLabel;
 
         return $this;
     }
@@ -375,11 +416,11 @@ abstract class AbstractTable
     }
 
     /**
-     * @param string[] $table_classes
+     * @param string[] $tableClasses
      */
-    public function setTableClasses(array $table_classes): AbstractTable
+    public function setTableClasses(array $tableClasses): AbstractTable
     {
-        $this->table_classes = $table_classes;
+        $this->table_classes = $tableClasses;
 
         return $this;
     }
@@ -538,9 +579,9 @@ abstract class AbstractTable
         return $this->display_column_selector;
     }
 
-    public function setDisplayColumnSelector(bool $display_column_selector): AbstractTable
+    public function setDisplayColumnSelector(bool $displayColumnSelector): AbstractTable
     {
-        $this->display_column_selector = $display_column_selector;
+        $this->display_column_selector = $displayColumnSelector;
 
         return $this;
     }
@@ -550,9 +591,9 @@ abstract class AbstractTable
         return $this->display_pagination;
     }
 
-    public function setDisplayPagination(bool $display_pagination): AbstractTable
+    public function setDisplayPagination(bool $displayPagination): AbstractTable
     {
-        $this->display_pagination = $display_pagination;
+        $this->display_pagination = $displayPagination;
 
         return $this;
     }
@@ -562,9 +603,9 @@ abstract class AbstractTable
         return $this->display_total_items;
     }
 
-    public function setDisplayTotalItems(bool $display_total_items): AbstractTable
+    public function setDisplayTotalItems(bool $displayTotalTtems): AbstractTable
     {
-        $this->display_total_items = $display_total_items;
+        $this->display_total_items = $displayTotalTtems;
 
         return $this;
     }
