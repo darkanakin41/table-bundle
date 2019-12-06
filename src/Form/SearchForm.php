@@ -9,6 +9,7 @@ namespace Darkanakin41\TableBundle\Form;
 use Darkanakin41\TableBundle\Definition\AbstractTable;
 use Darkanakin41\TableBundle\Definition\Field;
 use Darkanakin41\TableBundle\Fields\CountryField;
+use Darkanakin41\TableBundle\Fields\DateTimeField;
 use Darkanakin41\TableBundle\Form\Type\RangeSelectorType;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityRepository;
@@ -17,6 +18,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -37,7 +39,7 @@ class SearchForm extends AbstractType
 
     public static function applyToQueryBuilder(FormInterface $form, QueryBuilder $qb, AbstractTable $table)
     {
-        foreach($table->getCustomSearchTypes() as $type){
+        foreach ($table->getCustomSearchTypes() as $type) {
             $type->applyToQueryBuilder($form, $qb);
         }
         foreach ($table->getFields() as $field) {
@@ -99,7 +101,7 @@ class SearchForm extends AbstractType
         }
         $this->table = $options['table'];
         $this->doctrine = $options['doctrine'];
-        foreach($this->table->getCustomSearchTypes() as $type){
+        foreach ($this->table->getCustomSearchTypes() as $type) {
             $type->buildFormItem($builder);
         }
 
@@ -129,6 +131,10 @@ class SearchForm extends AbstractType
                 $settings['max'] = max($values);
             } elseif ($field instanceof CountryField) {
                 $classname = CountryType::class;
+            } elseif ($field instanceof DateTimeField) {
+                $classname = DateType::class;
+                $settings['widget'] = 'single_text';
+                $settings['input_format'] = $field->getFormat();
             }
 
             if (!is_null($field->getTranslationPrefix())) {
