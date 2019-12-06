@@ -508,60 +508,8 @@ abstract class AbstractTable
         if (is_array($object)) {
             return $this->getValueFromArray($object, $field);
         }
+
         return $this->getValueFromObject($object, $field);
-    }
-
-    /**
-     * Retrieve the value from the given object
-     *
-     * @param object $object the data object
-     * @param Field  $field
-     *
-     * @return mixed|string
-     */
-    private function getValueFromObject($object, Field $field)
-    {
-
-        $prefix = 'get';
-        $converter = new CamelCaseToSnakeCaseNameConverter();
-        if (!is_null($field->getJointure())) {
-            $tmp = $this->getObject($object, $field->getJointure());
-            if (is_null($tmp)) {
-                return '';
-            }
-            if (is_iterable($tmp)) {
-                return $tmp;
-            }
-            if (method_exists($tmp, 'is'.$converter->denormalize($field->getField()))) {
-                $prefix = 'is';
-            }
-            $value = call_user_func(array($tmp, $prefix.$converter->denormalize($field->getField())));
-        } else {
-            if (method_exists($object, 'is'.$converter->denormalize($field->getField()))) {
-                $prefix = 'is';
-            }
-            $value = call_user_func(array($object, $prefix.$converter->denormalize($field->getField())));
-        }
-
-        return $value;
-    }
-
-    /**
-     * Retrieve the value from the given array
-     *
-     * @param array $array the data array
-     * @param Field $field
-     *
-     * @return mixed|string
-     */
-    private function getValueFromArray($array, Field $field)
-    {
-
-        if (in_array($field->getField(), array_keys($array))) {
-            return $array[$field->getField()];
-        }
-
-        return '';
     }
 
     /**
@@ -740,6 +688,90 @@ abstract class AbstractTable
         return $this;
     }
 
+    /**
+     * Generate the query based on table parameters.
+     *
+     * @return Query
+     */
+    protected function generateQuery()
+    {
+        $alias = $this->getAlias();
+
+        $qb = $this->doctrine->getRepository($this->getClass())->createQueryBuilder($alias);
+
+        $this->addCustomQueryPart($qb);
+
+        foreach ($this->getJointures() as $jointure) {
+            $qb->leftJoin($jointure->getDQL($alias), strtolower($jointure->getId()))->addSelect(strtolower($jointure->getId()));
+        }
+
+        foreach ($this->sort as $field => $value) {
+            $qb->addOrderBy($alias.'.'.$field, $value);
+        }
+
+        foreach ($this->getFilters() as $key => $filter) {
+            $qb->andWhere($filter->getDQL($key, $this->getAlias()));
+            foreach ($filter->getDQLParameters($key) as $k => $v) {
+                $qb->setParameter($k, $v);
+            }
+        }
+
+        if (!is_null($this->search_form) && $this->search_form->isSubmitted() && $this->search_form->isValid()) {
+            SearchForm::applyToQueryBuilder($this->search_form, $qb, $this);
+        }
+
+        return $qb->getQuery();
+    }
+
+    /**
+     * Retrieve the value from the given object.
+     *
+     * @param object $object the data object
+     *
+     * @return mixed|string
+     */
+    private function getValueFromObject($object, Field $field)
+    {
+        $prefix = 'get';
+        $converter = new CamelCaseToSnakeCaseNameConverter();
+        if (!is_null($field->getJointure())) {
+            $tmp = $this->getObject($object, $field->getJointure());
+            if (is_null($tmp)) {
+                return '';
+            }
+            if (is_iterable($tmp)) {
+                return $tmp;
+            }
+            if (method_exists($tmp, 'is'.$converter->denormalize($field->getField()))) {
+                $prefix = 'is';
+            }
+            $value = call_user_func(array($tmp, $prefix.$converter->denormalize($field->getField())));
+        } else {
+            if (method_exists($object, 'is'.$converter->denormalize($field->getField()))) {
+                $prefix = 'is';
+            }
+            $value = call_user_func(array($object, $prefix.$converter->denormalize($field->getField())));
+        }
+
+        return $value;
+    }
+
+    /**
+     * Retrieve the value from the given array.
+     *
+     * @param array $array the data array
+     *
+     * @return mixed|string
+     */
+    private function getValueFromArray($array, Field $field)
+    {
+        if (in_array($field->getField(), array_keys($array))) {
+            return $array[$field->getField()];
+        }
+
+        return '';
+    }
+
     private function setConfig(array $config)
     {
         $this->setTemplate($config['template']['table']);
@@ -820,41 +852,6 @@ abstract class AbstractTable
             'table' => $this,
         ));
         $this->search_form->handleRequest($this->request_stack->getCurrentRequest());
-    }
-
-    /**
-     * Generate the query based on table parameters.
-     *
-     * @return Query
-     */
-    protected function generateQuery()
-    {
-        $alias = $this->getAlias();
-
-        $qb = $this->doctrine->getRepository($this->getClass())->createQueryBuilder($alias);
-
-        $this->addCustomQueryPart($qb);
-
-        foreach ($this->getJointures() as $jointure) {
-            $qb->leftJoin($jointure->getDQL($alias), strtolower($jointure->getId()))->addSelect(strtolower($jointure->getId()));
-        }
-
-        foreach ($this->sort as $field => $value) {
-            $qb->addOrderBy($alias.'.'.$field, $value);
-        }
-
-        foreach ($this->getFilters() as $key => $filter) {
-            $qb->andWhere($filter->getDQL($key, $this->getAlias()));
-            foreach ($filter->getDQLParameters($key) as $k => $v) {
-                $qb->setParameter($k, $v);
-            }
-        }
-
-        if (!is_null($this->search_form) && $this->search_form->isSubmitted() && $this->search_form->isValid()) {
-            SearchForm::applyToQueryBuilder($this->search_form, $qb, $this);
-        }
-
-        return $qb->getQuery();
     }
 
     /**

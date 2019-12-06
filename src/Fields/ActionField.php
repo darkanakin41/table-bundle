@@ -25,7 +25,7 @@ class ActionField extends Field
     {
         parent::__construct($field, $label, $id);
         $this->setBlock('action');
-        $this->setAttributes(['data-value' => sprintf('{%s}', $field)]);
+        $this->setAttributes(array('data-value' => sprintf('{%s}', $field)));
         $this->setButtonLabel('');
     }
 
@@ -39,8 +39,6 @@ class ActionField extends Field
 
     /**
      * @param string[] $attributes
-     *
-     * @return ActionField
      */
     public function setAttributes(array $attributes): ActionField
     {
