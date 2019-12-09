@@ -1,78 +1,6 @@
 {% block table %}
     {% if table.displayMenu %}
-        <div class="top-bar table-menu">
-            <div class="top-bar-left">
-                <ul class="dropdown menu" data-dropdown-menu>
-                    <li>
-                        <a href="#" data-open="{{ table.alias }}-filters">
-                            <i class="fa fa-filter"></i> {% if table.displayMenuLabel %}{{ 'action.search'|trans }}{% endif %}
-                        </a>
-                    </li>
-                    {% if table.displayColumnSelector and table.fieldsAvailable|length > 0 %}
-                        <li class="has-submenu">
-                            <a href="#">
-                                <i class="far fa-plus-square"></i> {% if table.displayMenuLabel %}{{ 'action.display'|trans }}{% endif %}
-                            </a>
-                            <ul class="submenu menu vertical">
-                                {% for fieldname in table.fieldsAvailable %}
-                                    {% set field = table.field(fieldname) %}
-                                    {% if field.visible %}
-                                        <li>
-                                            <a href="{{ path(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")|merge({'action' : 'add_field', 'field' : fieldname})) }}">
-                                                {{ field.label|trans|replace({'<br/>':'/'})|title }}
-                                            </a>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% endif %}
-                    {% if table.displayColumnSelector and table.fieldsDisplayed|length > 0 %}
-                        <li class="has-submenu">
-                            <a href="#">
-                                <i class="far fa-minus-square"></i> {% if table.displayMenuLabel %}{{ 'action.hide'|trans }}{% endif %}
-                            </a>
-                            <ul class="submenu menu vertical">
-                                {% for fieldname in table.fieldsDisplayed %}
-                                    {% set field = table.field(fieldname) %}
-                                    {% if field.visible %}
-                                        <li>
-                                            <a href="{{ path(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")|merge({'action' : 'remove_field', 'field' : fieldname})) }}">
-                                                {{ field.label|trans|replace({'<br/>':'/'})|title }}
-                                            </a>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% endif %}
-                    {% if table.displayColumnSelector and table.fieldsDisplayed != table.fieldsDisplayedDefault %}
-                        <li>
-                            <a href="{{ path(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")|merge({'action' : 'reset_field'})) }}">
-                                <i class="fas fa-undo"></i> {% if table.displayMenuLabel %}{{ 'action.reset_columns'|trans }}Réinitialiser les colones{% endif %}
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
-            {% if table.actions is not empty %}
-                <div class="top-bar-right">
-                    <ul class="menu">
-                        {% for action in table.actions %}
-                            <li>
-                                <a href="{{ path(action.route, action.routeParam) }}">
-                                    {% if action.translate %}
-                                        {{ action.label|lower|trans }}
-                                    {% else %}
-                                        {{ action.label }}
-                                    {% endif %}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% endif %}
-        </div>
+        {% include "@Darkanakin41Table/foundation/part/_top-bar.html.twig" %}
     {% endif %}
     {% set items = table.paginator %}
     {% block content %}
@@ -129,6 +57,11 @@
         <div class="reveal {% if table.fields|length > 8 %}large{% endif %}" id="{{ table.alias }}-filters" data-reveal>
             {% include "@Darkanakin41Table/foundation/filters.html.twig" with {'table' : table, 'app' : app} %}
         </div>
+        {% if table.exportEnabled %}
+            <div class="reveal {% if table.fields|length > 8 %}large{% endif %}" id="{{ table.alias }}-export" data-reveal>
+                {% include "@Darkanakin41Table/foundation/export.html.twig" with {'table' : table, 'app' : app} %}
+            </div>
+        {% endif %}
     {% endif %}
 {% endblock table %}
 

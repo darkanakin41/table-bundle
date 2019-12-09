@@ -35,6 +35,9 @@
         "symfony/console": "^4.0",
         "symfony/test-pack": "*"
     },
+    "suggest" :{
+        "phpoffice/phpspreadsheet": "If you want the export functionnality, that's the way to go ... "
+    },
     "config": {
         "sort-packages": true
     },

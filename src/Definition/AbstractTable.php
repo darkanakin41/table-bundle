@@ -6,8 +6,11 @@
 
 namespace Darkanakin41\TableBundle\Definition;
 
+use Darkanakin41\TableBundle\Exception\ComponentNotInstalled;
 use Darkanakin41\TableBundle\Exception\FieldNotExistException;
+use Darkanakin41\TableBundle\Form\ExportForm;
 use Darkanakin41\TableBundle\Form\SearchForm;
+use Darkanakin41\TableBundle\Helper\ExportTableHelper;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Knp\Component\Pager\PaginatorInterface;
@@ -19,6 +22,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
+use Symfony\Component\Translation\TranslatorInterface;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -112,6 +116,16 @@ abstract class AbstractTable
     /**
      * @var bool
      */
+    private $exportEnabled = false;
+
+    /**
+     * @var Form
+     */
+    private $exportForm;
+
+    /**
+     * @var bool
+     */
     private $displayColumnSelector;
 
     /**
@@ -155,14 +169,20 @@ abstract class AbstractTable
      */
     private $customSearchTypes = array();
 
-    public function __construct(PaginatorInterface $paginator, RequestStack $request_stack, RegistryInterface $doctrine, Twig_Environment $twigEnvironment, SessionInterface $session, FormFactoryInterface $formFactory, ContainerInterface $container)
+    /**
+     * @var bool
+     */
+    private $requestProcessed = false;
+
+    public function __construct(PaginatorInterface $paginator, RequestStack $request_stack, RegistryInterface $doctrine, Twig_Environment $twigEnvironment, SessionInterface $session, FormFactoryInterface $formFactory, TranslatorInterface $translator, ContainerInterface $container)
     {
         $this->paginator = $paginator;
         $this->request_stack = $request_stack;
-        $this->setDoctrine($doctrine);
+        $this->doctrine = $doctrine;
         $this->twig = $twigEnvironment;
         $this->formFactory = $formFactory;
         $this->session = $session;
+        $this->translator = $translator;
         $this->fields = array();
         $this->jointures = array();
         $this->filters = array();
@@ -187,6 +207,32 @@ abstract class AbstractTable
         }
 
         $this->setFieldsDisplayed($this->getSessionAttribute(self::FIELDS_DISPLAYED));
+    }
+
+    /**
+     * Check if PhpSpreadSheetIsInstalled
+     *
+     * @return bool
+     */
+    public function isPhpSpreadSheetInstalled()
+    {
+        return class_exists('PhpOffice\PhpSpreadsheet\Spreadsheet');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isExportEnabled(): bool
+    {
+        return $this->exportEnabled;
+    }
+
+    /**
+     * @param bool $exportEnabled
+     */
+    public function setExportEnabled(bool $exportEnabled): void
+    {
+        $this->exportEnabled = $exportEnabled;
     }
 
     /**
@@ -504,6 +550,27 @@ abstract class AbstractTable
     }
 
     /**
+     * @return bool
+     */
+    public function isRequestProcessed(): bool
+    {
+        return $this->requestProcessed;
+    }
+
+    public function processRequest(){
+
+        if(!$this->requestProcessed){
+            $this->handleRequest();
+
+            $this->generateSearchForm();
+            $this->generateExportForm();
+            $this->generate();
+
+            $this->requestProcessed = true;
+        }
+    }
+
+    /**
      * Render the table.
      *
      * @return string
@@ -515,10 +582,7 @@ abstract class AbstractTable
      */
     public function render()
     {
-        $this->handleRequest();
-
-        $this->generateSearchForm();
-        $this->generate();
+        $this->processRequest();
 
         $template = $this->twig->load($this->getTemplate());
 
@@ -551,16 +615,6 @@ abstract class AbstractTable
         }
 
         return $this->getValueFromObject($object, $field);
-    }
-
-    /**
-     * Get the search form.
-     *
-     * @return FormView
-     */
-    public function getSearchForm()
-    {
-        return $this->search_form->createView();
     }
 
     /**
@@ -757,8 +811,8 @@ abstract class AbstractTable
             }
         }
 
-        if (!is_null($this->search_form) && $this->search_form->isSubmitted() && $this->search_form->isValid()) {
-            SearchForm::applyToQueryBuilder($this->search_form, $qb, $this);
+        if (!is_null($this->searchForm) && $this->searchForm->isSubmitted() && $this->searchForm->isValid()) {
+            SearchForm::applyToQueryBuilder($this->searchForm, $qb, $this);
         }
 
         return $qb->getQuery();
@@ -887,13 +941,99 @@ abstract class AbstractTable
 
     private function generateSearchForm()
     {
-        $this->search_form = $this->formFactory->create(SearchForm::class, null, array(
+        $this->searchForm = $this->formFactory->create(SearchForm::class, null, array(
             'method' => 'GET',
             'doctrine' => $this->doctrine,
             'table' => $this,
         ));
-        $this->search_form->handleRequest($this->request_stack->getCurrentRequest());
+        $this->searchForm->handleRequest($this->request_stack->getCurrentRequest());
     }
+
+    /**
+     * Generate the export form
+     *
+     * @throws ComponentNotInstalled
+     */
+    private function generateExportForm()
+    {
+        if (!$this->isExportEnabled()) {
+            return;
+        }
+        if (!$this->isPhpSpreadSheetInstalled()) {
+            throw new ComponentNotInstalled('phpoffice/phpspreadsheet');
+        }
+        $this->exportForm = $this->formFactory->create(ExportForm::class, null, array(
+            'method' => 'GET',
+        ));
+        $this->exportForm->handleRequest($this->request_stack->getCurrentRequest());
+    }
+
+    /**
+     * Get the search form.
+     *
+     * @return FormView
+     */
+    public function getSearchFormView()
+    {
+        return $this->searchForm->createView();
+    }
+
+    /**
+     * Get the export form.
+     *
+     * @return FormView
+     */
+    public function getExportFormView()
+    {
+        return $this->exportForm->createView();
+    }
+
+    /**
+     * @return Form
+     */
+    public function getSearchForm(): Form
+    {
+        return $this->searchForm;
+    }
+
+    /**
+     * @return Form
+     */
+    public function getExportForm(): Form
+    {
+        return $this->exportForm;
+    }
+
+    /**
+     * Generate the export file
+     *
+     * @return void|null
+     *
+     * @throws ComponentNotInstalled
+     */
+    public function generateExport(){
+        if(!$this->isPhpSpreadSheetInstalled()){
+            throw new ComponentNotInstalled('phpoffice/phpspreadsheet');
+        }
+
+        $this->processRequest();
+
+        if($this->exportForm->isSubmitted() && $this->exportForm->isValid()){
+            $exporter = new ExportTableHelper($this);
+            return $exporter->generate();
+        }
+        return null;
+    }
+
+    /**
+     * @return TranslatorInterface
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
+    }
+
+
 
     /**
      * Retrieve the object in relation with the given Jointure.

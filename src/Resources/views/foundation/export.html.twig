@@ -1,0 +1,18 @@
+{% extends "@Darkanakin41Core/foundation/modal.html.twig" %}
+
+{% set form = table.exportFormView %}
+{% set submitButton = form_widget(form.submit) %}
+
+{% block title %}{{ 'action.export'|trans }}{% endblock %}
+
+{% block body %}
+    {{ form_errors(form) }}
+    {{ form_row(form.format)}}
+    {{ form_row(form.content)}}
+{% endblock body %}
+
+{% block footer %}
+    <div class="button-group">
+        {{ submitButton|raw }}
+    </div>
+{% endblock footer %}
