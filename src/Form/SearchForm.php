@@ -11,8 +11,6 @@ use Darkanakin41\TableBundle\Definition\Field;
 use Darkanakin41\TableBundle\Fields\CountryField;
 use Darkanakin41\TableBundle\Fields\DateTimeField;
 use Darkanakin41\TableBundle\Form\Type\RangeSelectorType;
-use Doctrine\Common\Persistence\ObjectRepository;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\AbstractType;

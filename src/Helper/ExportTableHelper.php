@@ -1,8 +1,10 @@
 <?php
 
+/*
+ * This file is part of the Darkanakin41TableBundle package.
+ */
 
 namespace Darkanakin41\TableBundle\Helper;
-
 
 use Darkanakin41\TableBundle\Definition\AbstractTable;
 use Darkanakin41\TableBundle\Definition\Field;
@@ -10,25 +12,19 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ExportTableHelper
 {
-    const AVAILABLE_FORMATS = [
-        "excel" => "excel",
-        "openoffice" => "openoffice",
-        "csv" => "csv",
-    ];
-    const CONTENT_SELECTION = [
-        "displayed_columns" => "displayed_columns",
-        "all_columns" => "all_columns",
-    ];
-
-    public static function isPhpSpreadSheetEnabled()
-    {
-        return class_exists('PhpOffice\PhpSpreadsheet\Spreadsheet');
-    }
+    const AVAILABLE_FORMATS = array(
+        'excel' => 'excel',
+        'openoffice' => 'openoffice',
+        'csv' => 'csv',
+    );
+    const CONTENT_SELECTION = array(
+        'displayed_columns' => 'displayed_columns',
+        'all_columns' => 'all_columns',
+    );
 
     /**
      * @var AbstractTable
@@ -39,32 +35,18 @@ class ExportTableHelper
      * @var TranslatorInterface
      */
     private $translator;
+
     /**
      * ExportTableHelper constructor.
-     *
-     * @param AbstractTable $table
      */
     public function __construct(AbstractTable $table)
     {
         $this->table = $table;
     }
 
-    private function getFieldsToExport()
+    public static function isPhpSpreadSheetEnabled()
     {
-        $exportForm = $this->table->getExportForm();
-
-        switch ($exportForm->get('content')->getData()) {
-            case 'displayed_columns':
-                $fields = [];
-                foreach($this->table->getFieldsDisplayed() as $fieldname){
-                    $fields[] = $this->table->getField($fieldname);
-                }
-                return $fields;
-            case 'all_columns':
-                return $this->table->getFieldsVisibles();
-        }
-
-        return [];
+        return class_exists('PhpOffice\PhpSpreadsheet\Spreadsheet');
     }
 
     public function generate()
@@ -85,17 +67,37 @@ class ExportTableHelper
      */
     public function generateHeaders(Worksheet $worksheet, array $fields)
     {
-        foreach ($fields as $key => $field){
+        foreach ($fields as $key => $field) {
             $columnLabel = $this->table->getTranslator()->trans($field->getLabel());
             $currentColumn = array_search($key, array_keys($fields));
 
-            $coordinates = Coordinate::stringFromColumnIndex($currentColumn+1);
+            $coordinates = Coordinate::stringFromColumnIndex($currentColumn + 1);
 
-            $worksheet->setCellValue($coordinates . "1", $columnLabel);
+            $worksheet->setCellValue($coordinates.'1', $columnLabel);
         }
     }
 
-    private function getWritterType(){
+    private function getFieldsToExport()
+    {
+        $exportForm = $this->table->getExportForm();
+
+        switch ($exportForm->get('content')->getData()) {
+            case 'displayed_columns':
+                $fields = array();
+                foreach ($this->table->getFieldsDisplayed() as $fieldname) {
+                    $fields[] = $this->table->getField($fieldname);
+                }
+
+                return $fields;
+            case 'all_columns':
+                return $this->table->getFieldsVisibles();
+        }
+
+        return array();
+    }
+
+    private function getWritterType()
+    {
         $exportForm = $this->table->getExportForm();
 
         switch ($exportForm->get('format')->getData()) {
@@ -107,10 +109,11 @@ class ExportTableHelper
                 return 'Ods';
         }
 
-        return [];
+        return array();
     }
 
-    private function fileContent(Spreadsheet $spreadsheet){
+    private function fileContent(Spreadsheet $spreadsheet)
+    {
         $writer = IOFactory::createWriter($spreadsheet, $this->getWritterType());
         $tmpfile = tempnam('/tmp', 'tessiextranet');
         $writer->save($tmpfile);

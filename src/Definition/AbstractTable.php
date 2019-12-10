@@ -210,7 +210,12 @@ abstract class AbstractTable
     }
 
     /**
-     * Check if PhpSpreadSheetIsInstalled
+     * Intialise all fields of the table and so on.
+     */
+    abstract protected function __init__();
+
+    /**
+     * Check if PhpSpreadSheetIsInstalled.
      *
      * @return bool
      */
@@ -219,26 +224,15 @@ abstract class AbstractTable
         return class_exists('PhpOffice\PhpSpreadsheet\Spreadsheet');
     }
 
-    /**
-     * @return bool
-     */
     public function isExportEnabled(): bool
     {
         return $this->exportEnabled;
     }
 
-    /**
-     * @param bool $exportEnabled
-     */
     public function setExportEnabled(bool $exportEnabled): void
     {
         $this->exportEnabled = $exportEnabled;
     }
-
-    /**
-     * Intialise all fields of the table and so on.
-     */
-    abstract protected function __init__();
 
     /**
      * @return string[]
@@ -327,11 +321,6 @@ abstract class AbstractTable
         return $this->display_menu;
     }
 
-    /**
-     * @param bool $displayMenu
-     *
-     * @return AbstractTable
-     */
     public function setDisplayMenu(bool $displayMenu): AbstractTable
     {
         $this->display_menu = $displayMenu;
@@ -340,7 +329,8 @@ abstract class AbstractTable
     }
 
     /**
-     * Get the list of custom search types
+     * Get the list of custom search types.
+     *
      * @return AbstractCustomSearchType[]
      */
     public function getCustomSearchTypes(): array
@@ -349,9 +339,7 @@ abstract class AbstractTable
     }
 
     /**
-     * Add a custom search type into the search form
-     *
-     * @param AbstractCustomSearchType $customSearchType
+     * Add a custom search type into the search form.
      */
     public function addCustomSearchType(AbstractCustomSearchType $customSearchType)
     {
@@ -359,7 +347,7 @@ abstract class AbstractTable
     }
 
     /**
-     * Remove the custom search type
+     * Remove the custom search type.
      *
      * @param string $id the id to remove
      */
@@ -549,17 +537,14 @@ abstract class AbstractTable
         return $this->paginator_calculated;
     }
 
-    /**
-     * @return bool
-     */
     public function isRequestProcessed(): bool
     {
         return $this->requestProcessed;
     }
 
-    public function processRequest(){
-
-        if(!$this->requestProcessed){
+    public function processRequest()
+    {
+        if (!$this->requestProcessed) {
             $this->handleRequest();
 
             $this->generateSearchForm();
@@ -700,6 +685,65 @@ abstract class AbstractTable
         $this->sort = $sort;
 
         return $this;
+    }
+
+    /**
+     * Get the search form.
+     *
+     * @return FormView
+     */
+    public function getSearchFormView()
+    {
+        return $this->searchForm->createView();
+    }
+
+    /**
+     * Get the export form.
+     *
+     * @return FormView
+     */
+    public function getExportFormView()
+    {
+        return $this->exportForm->createView();
+    }
+
+    public function getSearchForm(): Form
+    {
+        return $this->searchForm;
+    }
+
+    public function getExportForm(): Form
+    {
+        return $this->exportForm;
+    }
+
+    /**
+     * Generate the export file.
+     *
+     * @return void|null
+     *
+     * @throws ComponentNotInstalled
+     */
+    public function generateExport()
+    {
+        if (!$this->isPhpSpreadSheetInstalled()) {
+            throw new ComponentNotInstalled('phpoffice/phpspreadsheet');
+        }
+
+        $this->processRequest();
+
+        if ($this->exportForm->isSubmitted() && $this->exportForm->isValid()) {
+            $exporter = new ExportTableHelper($this);
+
+            return $exporter->generate();
+        }
+
+        return null;
+    }
+
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     /**
@@ -950,7 +994,7 @@ abstract class AbstractTable
     }
 
     /**
-     * Generate the export form
+     * Generate the export form.
      *
      * @throws ComponentNotInstalled
      */
@@ -967,73 +1011,6 @@ abstract class AbstractTable
         ));
         $this->exportForm->handleRequest($this->request_stack->getCurrentRequest());
     }
-
-    /**
-     * Get the search form.
-     *
-     * @return FormView
-     */
-    public function getSearchFormView()
-    {
-        return $this->searchForm->createView();
-    }
-
-    /**
-     * Get the export form.
-     *
-     * @return FormView
-     */
-    public function getExportFormView()
-    {
-        return $this->exportForm->createView();
-    }
-
-    /**
-     * @return Form
-     */
-    public function getSearchForm(): Form
-    {
-        return $this->searchForm;
-    }
-
-    /**
-     * @return Form
-     */
-    public function getExportForm(): Form
-    {
-        return $this->exportForm;
-    }
-
-    /**
-     * Generate the export file
-     *
-     * @return void|null
-     *
-     * @throws ComponentNotInstalled
-     */
-    public function generateExport(){
-        if(!$this->isPhpSpreadSheetInstalled()){
-            throw new ComponentNotInstalled('phpoffice/phpspreadsheet');
-        }
-
-        $this->processRequest();
-
-        if($this->exportForm->isSubmitted() && $this->exportForm->isValid()){
-            $exporter = new ExportTableHelper($this);
-            return $exporter->generate();
-        }
-        return null;
-    }
-
-    /**
-     * @return TranslatorInterface
-     */
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
-    }
-
-
 
     /**
      * Retrieve the object in relation with the given Jointure.

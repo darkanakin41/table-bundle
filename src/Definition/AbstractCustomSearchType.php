@@ -1,8 +1,10 @@
 <?php
 
+/*
+ * This file is part of the Darkanakin41TableBundle package.
+ */
 
 namespace Darkanakin41\TableBundle\Definition;
-
 
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -12,6 +14,7 @@ abstract class AbstractCustomSearchType
 {
     /** @var string */
     private $id;
+
     /**
      * AbstractCustomSearchType constructor.
      *
@@ -23,8 +26,7 @@ abstract class AbstractCustomSearchType
     }
 
     /**
-     * Get the id of the custom search type (uniq)
-     * @return string
+     * Get the id of the custom search type (uniq).
      */
     public function getId(): string
     {
@@ -32,21 +34,16 @@ abstract class AbstractCustomSearchType
     }
 
     /**
-     * Create the form item
-     *
-     * @param FormBuilderInterface $builder
+     * Create the form item.
      *
      * @return void
      */
-    abstract function buildFormItem(FormBuilderInterface $builder);
+    abstract public function buildFormItem(FormBuilderInterface $builder);
 
     /**
-     * Apply the filter to the query builder
-     *
-     * @param FormInterface $form
-     * @param QueryBuilder  $qb
+     * Apply the filter to the query builder.
      *
      * @return void
      */
-    abstract function applyToQueryBuilder(FormInterface $form, QueryBuilder $qb);
+    abstract public function applyToQueryBuilder(FormInterface $form, QueryBuilder $qb);
 }

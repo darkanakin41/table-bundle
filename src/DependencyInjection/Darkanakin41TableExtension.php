@@ -36,7 +36,6 @@ class Darkanakin41TableExtension extends Extension
         if ($container->hasExtension('twig')) {
             $container->prependExtensionConfig('twig', array('paths' => array(__DIR__.'/../Resources/views' => 'Darkanakin41Table')));
         }
-
     }
 
     private function arrayMergeRecursiveDistinct(array &$array1, array &$array2)
