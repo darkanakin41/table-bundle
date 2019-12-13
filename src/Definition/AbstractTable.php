@@ -788,7 +788,7 @@ abstract class AbstractTable
      *
      * @return Query
      */
-    protected function generateQuery()
+    public function generateQuery()
     {
         $alias = $this->getAlias();
 
@@ -848,7 +848,7 @@ abstract class AbstractTable
             $value = call_user_func(array($object, $prefix.$converter->denormalize($field->getField())));
         }
 
-        return $value;
+        return $field->getValue($value);
     }
 
     /**
