@@ -747,6 +747,41 @@ abstract class AbstractTable
     }
 
     /**
+     * Generate the query based on table parameters.
+     *
+     * @return Query
+     */
+    public function generateQuery()
+    {
+        $alias = $this->getAlias();
+
+        $qb = $this->doctrine->getRepository($this->getClass())->createQueryBuilder($alias);
+
+        $this->addCustomQueryPart($qb);
+
+        foreach ($this->getJointures() as $jointure) {
+            $qb->leftJoin($jointure->getDQL($alias), strtolower($jointure->getId()))->addSelect(strtolower($jointure->getId()));
+        }
+
+        foreach ($this->sort as $field => $value) {
+            $qb->addOrderBy($alias.'.'.$field, $value);
+        }
+
+        foreach ($this->getFilters() as $key => $filter) {
+            $qb->andWhere($filter->getDQL($key, $this->getAlias()));
+            foreach ($filter->getDQLParameters($key) as $k => $v) {
+                $qb->setParameter($k, $v);
+            }
+        }
+
+        if (!is_null($this->searchForm) && $this->searchForm->isSubmitted() && $this->searchForm->isValid()) {
+            SearchForm::applyToQueryBuilder($this->searchForm, $qb, $this);
+        }
+
+        return $qb->getQuery();
+    }
+
+    /**
      * Generate the paginator base on table parameters.
      */
     protected function generate()
@@ -825,41 +860,6 @@ abstract class AbstractTable
         $this->jointures[$jointure->getId()] = $jointure;
 
         return $this;
-    }
-
-    /**
-     * Generate the query based on table parameters.
-     *
-     * @return Query
-     */
-    public function generateQuery()
-    {
-        $alias = $this->getAlias();
-
-        $qb = $this->doctrine->getRepository($this->getClass())->createQueryBuilder($alias);
-
-        $this->addCustomQueryPart($qb);
-
-        foreach ($this->getJointures() as $jointure) {
-            $qb->leftJoin($jointure->getDQL($alias), strtolower($jointure->getId()))->addSelect(strtolower($jointure->getId()));
-        }
-
-        foreach ($this->sort as $field => $value) {
-            $qb->addOrderBy($alias.'.'.$field, $value);
-        }
-
-        foreach ($this->getFilters() as $key => $filter) {
-            $qb->andWhere($filter->getDQL($key, $this->getAlias()));
-            foreach ($filter->getDQLParameters($key) as $k => $v) {
-                $qb->setParameter($k, $v);
-            }
-        }
-
-        if (!is_null($this->searchForm) && $this->searchForm->isSubmitted() && $this->searchForm->isValid()) {
-            SearchForm::applyToQueryBuilder($this->searchForm, $qb, $this);
-        }
-
-        return $qb->getQuery();
     }
 
     /**

@@ -52,7 +52,7 @@ class ExportTableHelper
     public function generate()
     {
         $maxExecutionTime = ini_get('max_execution_time');
-        set_time_limit(120) ;
+        set_time_limit(120);
 
         $spreadsheet = new Spreadsheet();
 
@@ -62,14 +62,13 @@ class ExportTableHelper
         $this->generateHeaders($worksheet, $fields);
         $this->generateRows($worksheet, $fields);
 
-        set_time_limit($maxExecutionTime) ;
+        set_time_limit($maxExecutionTime);
 
         return $this->fileContent($spreadsheet);
     }
 
     /**
-     * @param Worksheet $worksheet
-     * @param Field[]   $fields
+     * @param Field[] $fields
      */
     public function generateHeaders(Worksheet $worksheet, array $fields)
     {
@@ -84,8 +83,7 @@ class ExportTableHelper
     }
 
     /**
-     * @param Worksheet $worksheet
-     * @param Field[]   $fields
+     * @param Field[] $fields
      */
     public function generateRows(Worksheet $worksheet, array $fields)
     {

@@ -1,7 +1,10 @@
 # darkanakin41/table-bundle
+
+[![Actions Status](https://github.com/darkanakin41/table-bundle/workflows/Quality/badge.svg)](https://github.com/darkanakin41/table-bundle/actions)
+
 This bundle is designed to grant functionnalities to create simple table based on entities.
 
-Current available template : 
+Current available template :
 * [Foundation](https://foundation.zurb.com/)
 
 ## Features
@@ -22,8 +25,8 @@ composer require darkanakin41/table-bundle
 ## Dependencies
 * [KnpLabs/KnpPaginatorBundle](https://github.com/KnpLabs/KnpPaginatorBundle)
 
-## Configuration 
-Configuration is, at the moment, rather basic : 
+## Configuration
+Configuration is, at the moment, rather basic :
 ```yaml
 darkanakin41_table:
     template:
@@ -38,12 +41,12 @@ In order to use the bundle, you must declare your own Table class which will ext
 
 Then, you'll have to override method ```public function __init__() ``` in order to define the differents columns you need
 
-Next, you'll need to pass the table to the view and in the template, use a twig extension from the bundle to display it : 
+Next, you'll need to pass the table to the view and in the template, use a twig extension from the bundle to display it :
 ```twig
 {{ darkanakin41_table_render(table) }}
 ```
 
-## TODO 
+## TODO
 * Add another way of displaying search form
 * Add template for bootstrap
 * Create a more complete documentation on the table, the fields available and the way of override templates
