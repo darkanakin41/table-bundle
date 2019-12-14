@@ -51,19 +51,25 @@ class ExportTableHelper
 
     public function generate()
     {
+        $maxExecutionTime = ini_get('max_execution_time');
+        set_time_limit(120) ;
+
         $spreadsheet = new Spreadsheet();
 
         $spreadsheet->setActiveSheetIndex(0);
         $worksheet = $spreadsheet->getActiveSheet();
         $fields = $this->getFieldsToExport();
         $this->generateHeaders($worksheet, $fields);
+        $this->generateRows($worksheet, $fields);
+
+        set_time_limit($maxExecutionTime) ;
 
         return $this->fileContent($spreadsheet);
     }
 
     /**
-     * @param Spreadsheet $worksheet
-     * @param Field[]     $fields
+     * @param Worksheet $worksheet
+     * @param Field[]   $fields
      */
     public function generateHeaders(Worksheet $worksheet, array $fields)
     {
@@ -77,23 +83,36 @@ class ExportTableHelper
         }
     }
 
-    private function getFieldsToExport()
+    /**
+     * @param Worksheet $worksheet
+     * @param Field[]   $fields
+     */
+    public function generateRows(Worksheet $worksheet, array $fields)
     {
-        $exportForm = $this->table->getExportForm();
+        $query = $this->table->generateQuery();
+        $rows = $query->getResult();
 
-        switch ($exportForm->get('content')->getData()) {
-            case 'displayed_columns':
-                $fields = array();
-                foreach ($this->table->getFieldsDisplayed() as $fieldname) {
-                    $fields[] = $this->table->getField($fieldname);
+        foreach ($rows as $index => $entity) {
+            foreach ($fields as $key => $field) {
+                $currentColumn = array_search($key, array_keys($fields));
+                $coordinates = Coordinate::stringFromColumnIndex($currentColumn + 1);
+
+                $value = $this->table->getValue($entity, $field);
+                if (!empty($field->getValueToLabels())) {
+                    $value = $field->getValueToLabel($value);
                 }
 
-                return $fields;
-            case 'all_columns':
-                return $this->table->getFieldsVisibles();
-        }
+                if ($field->isTranslation()) {
+                    if (!empty($field->getTranslationPrefix())) {
+                        $value = $field->getTranslationPrefix().$value;
+                    }
 
-        return array();
+                    $value = $this->translator->trans($value);
+                }
+
+                $worksheet->setCellValue($coordinates.($index + 2), $value);
+            }
+        }
     }
 
     private function getWritterType()
