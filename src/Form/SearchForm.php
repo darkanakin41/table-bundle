@@ -46,18 +46,12 @@ class SearchForm extends AbstractType
             }
             $value = $form->get($field->getId())->getData();
             if (!empty($value)) {
-                if ($field->isNumeric()) {
-                    $qb->andWhere($field->getDQL($table->getAlias()).' BETWEEN :'.$field->getId().'_min AND :'.$field->getId().'_max');
-                    $qb->setParameter($field->getId().'_min', $value['min']);
-                    $qb->setParameter($field->getId().'_max', $value['max']);
-                } else {
-                    $dql = $field->getQBFilter($table, $qb);
-                    if (false !== stripos($dql, 'LIKE')) {
-                        $value = "%$value%";
-                    }
-                    $qb->andWhere($dql);
-                    $qb->setParameter($field->getId(), $value);
+                $dql = $field->getQBFilter($table, $qb);
+                if (false !== stripos($dql, 'LIKE')) {
+                    $value = "%$value%";
                 }
+                $qb->andWhere($dql);
+                $qb->setParameter($field->getId(), $value);
             }
         }
     }
@@ -122,11 +116,6 @@ class SearchForm extends AbstractType
                 } else {
                     $settings['choices'] = $this->getDistinctValues($field);
                 }
-            } elseif ($field->isNumeric()) {
-                $classname = RangeSelectorType::class;
-                $values = $this->getDistinctValues($field);
-                $settings['min'] = min($values);
-                $settings['max'] = max($values);
             } elseif ($field instanceof CountryField) {
                 $classname = CountryType::class;
             } elseif ($field instanceof DateTimeField) {
