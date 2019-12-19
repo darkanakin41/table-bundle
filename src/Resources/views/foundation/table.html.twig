@@ -36,7 +36,7 @@
                     </tr>
                 {% endfor %}
                 </tbody>
-                {% if  table.displayPagination or  table.displayTotalItems %}
+                {% if  table.displayPagination or table.displayTotalItems %}
                     <tfoot>
                     <tr>
                         <td class="text-left" colspan="{{ table.fieldsDisplayed|length / 2 }}">
@@ -55,11 +55,11 @@
     {% endblock content %}
     {% if table.displayMenu %}
         <div class="reveal {% if table.fields|length > 8 %}large{% endif %}" id="{{ table.alias }}-filters" data-reveal>
-            {% include "@Darkanakin41Table/foundation/filters.html.twig" with {'table' : table, 'app' : app} %}
+            {% include "@Darkanakin41Table/foundation/part/_filters.html.twig" with {'table': table, 'app': app} %}
         </div>
         {% if table.exportEnabled %}
             <div class="reveal {% if table.fields|length > 8 %}large{% endif %}" id="{{ table.alias }}-export" data-reveal>
-                {% include "@Darkanakin41Table/foundation/export.html.twig" with {'table' : table, 'app' : app} %}
+                {% include "@Darkanakin41Table/foundation/part/_export.html.twig" with {'table': table, 'app': app} %}
             </div>
         {% endif %}
     {% endif %}

@@ -1,7 +1,7 @@
 {% extends "@Darkanakin41Core/foundation/modal.html.twig" %}
 
 {% set form = table.searchFormView %}
-{% set submitButton = form_widget(form.submit) %}
+{% set submit_button = form_widget(form.submit) %}
 
 {% block title %}{{ 'action.search'|trans }}{% endblock %}
 
@@ -32,7 +32,7 @@
 
 {% block footer %}
     <div class="button-group">
-        {{ submitButton|raw }}
+        {{ submit_button|raw }}
         <a href="{{ path(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")) }}" class="button warning">
             <i class="fa fa-eraser"></i> {{ 'action.reset_filter'|trans }}
         </a>

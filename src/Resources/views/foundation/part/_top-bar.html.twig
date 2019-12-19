@@ -16,8 +16,8 @@
                             {% set field = table.field(fieldname) %}
                             {% if field.visible %}
                                 <li>
-                                    <a href="{{ path(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")|merge({'action' : 'add_field', 'field' : fieldname})) }}">
-                                        {{ field.label|trans|replace({'<br/>':'/'})|title }}
+                                    <a href="{{ path(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")|merge({'action': 'add_field', 'field': fieldname})) }}">
+                                        {{ field.label|trans|replace({'<br/>': '/'})|title }}
                                     </a>
                                 </li>
                             {% endif %}
@@ -35,8 +35,8 @@
                             {% set field = table.field(fieldname) %}
                             {% if field.visible %}
                                 <li>
-                                    <a href="{{ path(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")|merge({'action' : 'remove_field', 'field' : fieldname})) }}">
-                                        {{ field.label|trans|replace({'<br/>':'/'})|title }}
+                                    <a href="{{ path(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")|merge({'action': 'remove_field', 'field': fieldname})) }}">
+                                        {{ field.label|trans|replace({'<br/>': '/'})|title }}
                                     </a>
                                 </li>
                             {% endif %}
@@ -46,7 +46,7 @@
             {% endif %}
             {% if table.displayColumnSelector and table.fieldsDisplayed != table.fieldsDisplayedDefault %}
                 <li>
-                    <a href="{{ path(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")|merge({'action' : 'reset_field'})) }}">
+                    <a href="{{ path(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")|merge({'action': 'reset_field'})) }}">
                         <i class="fas fa-undo"></i> {% if table.displayMenuLabel %}{{ 'action.reset_columns'|trans }}Réinitialiser les colones{% endif %}
                     </a>
                 </li>

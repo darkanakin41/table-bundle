@@ -119,16 +119,17 @@ class ExportTableHelper
 
         switch ($exportForm->get('content')->getData()) {
             case 'displayed_columns':
-                $fields = [];
+                $fields = array();
                 foreach ($this->table->getFieldsDisplayed() as $fieldname) {
                     $fields[] = $this->table->getField($fieldname);
                 }
+
                 return $fields;
             case 'all_columns':
                 return $this->table->getFieldsVisibles();
         }
 
-        return [];
+        return array();
     }
 
     private function getWritterType()
