@@ -46,6 +46,13 @@ twig_cs: ## Lance les contrôles qualité sur les templates TWIG
 twig_cs: vendor
 	./vendor/bin/twigcs lint src/Resources/views
 
+twig_cs: ## Lance les contrôles qualité sur les templates TWIG
+twig_cs: vendor
+	./vendor/bin/twigcs lint src/Resources/views
+
+test:
+	./vendor/bin/phpunit --coverage-text --coverage-html ./coverage
+
 .PHONY: security php_cs php_cs_dry_run twig_cs
 
 
