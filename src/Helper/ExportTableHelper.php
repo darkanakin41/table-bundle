@@ -113,6 +113,24 @@ class ExportTableHelper
         }
     }
 
+    private function getFieldsToExport()
+    {
+        $exportForm = $this->table->getExportForm();
+
+        switch ($exportForm->get('content')->getData()) {
+            case 'displayed_columns':
+                $fields = [];
+                foreach ($this->table->getFieldsDisplayed() as $fieldname) {
+                    $fields[] = $this->table->getField($fieldname);
+                }
+                return $fields;
+            case 'all_columns':
+                return $this->table->getFieldsVisibles();
+        }
+
+        return [];
+    }
+
     private function getWritterType()
     {
         $exportForm = $this->table->getExportForm();
