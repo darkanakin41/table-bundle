@@ -3,6 +3,7 @@
 [![Actions Status](https://github.com/darkanakin41/table-bundle/workflows/Quality/badge.svg)](https://github.com/darkanakin41/table-bundle/actions)
 [![Total Downloads](https://poser.pugx.org/darkanakin41/table-bundle/downloads.svg)](https://packagist.org/packages/darkanakin41/table-bundle) 
 [![Latest Stable Version](https://poser.pugx.org/darkanakin41/table-bundle/v/stable.svg)](https://packagist.org/packages/darkanakin41/table-bundle)
+
 This bundle is designed to grant functionnalities to create simple table based on entities.
 
 Current available template :
