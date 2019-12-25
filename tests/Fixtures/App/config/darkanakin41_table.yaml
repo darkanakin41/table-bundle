@@ -1,0 +1,6 @@
+darkanakin41_table:
+    template:
+        # Select the template for all fields
+        fields: '@Darkanakin41Table/foundation/fields.html.twig'
+        # Select the template for all table
+        table: '@Darkanakin41Table/foundation/table.html.twig'
