@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 use Symfony\Component\Translation\TranslatorInterface;
 use Throwable;
+use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -54,7 +55,7 @@ abstract class AbstractTable
     private $jointures = array();
 
     /**
-     * @var Twig_Environment
+     * @var Environment
      */
     private $twig;
 
@@ -174,7 +175,7 @@ abstract class AbstractTable
      */
     private $requestProcessed = false;
 
-    public function __construct(PaginatorInterface $paginator, RequestStack $request_stack, RegistryInterface $doctrine, Twig_Environment $twigEnvironment, SessionInterface $session, FormFactoryInterface $formFactory, TranslatorInterface $translator, ContainerInterface $container)
+    public function __construct(PaginatorInterface $paginator, RequestStack $request_stack, RegistryInterface $doctrine, Environment $twigEnvironment, SessionInterface $session, FormFactoryInterface $formFactory, TranslatorInterface $translator, ContainerInterface $container)
     {
         $this->paginator = $paginator;
         $this->request_stack = $request_stack;
