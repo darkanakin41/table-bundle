@@ -13,18 +13,22 @@
                     {{ form_row(attribute(form,field.id)) }}
                 </div>
             {% endfor %}
-            {% for field in table.fields if field.filterable %}
-                <div class="cell medium-6">
-                    {{ form_row(attribute(form,field.id)) }}
-                </div>
+            {% for field in table.fields %}
+                {% if field.filterable %}
+                    <div class="cell medium-6">
+                        {{ form_row(attribute(form,field.id)) }}
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
     {% else %}
         {% for field in table.customSearchTypes %}
             {{ form_row(attribute(form,field.id)) }}
         {% endfor %}
-        {% for field in table.fields if field.filterable %}
-            {{ form_row(attribute(form,field.id)) }}
+        {% for field in table.fields %}
+            {% if field.filterable %}
+                {{ form_row(attribute(form,field.id)) }}
+            {% endif %}
         {% endfor %}
     {% endif %}
 
