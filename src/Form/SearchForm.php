@@ -10,8 +10,8 @@ use Darkanakin41\TableBundle\Definition\AbstractTable;
 use Darkanakin41\TableBundle\Definition\Field;
 use Darkanakin41\TableBundle\Fields\CountryField;
 use Darkanakin41\TableBundle\Fields\DateTimeField;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
@@ -30,7 +30,7 @@ class SearchForm extends AbstractType
     private $table;
 
     /**
-     * @var RegistryInterface
+     * @var ManagerRegistry
      */
     private $doctrine;
 
@@ -67,12 +67,12 @@ class SearchForm extends AbstractType
         return $this;
     }
 
-    public function getDoctrine(): RegistryInterface
+    public function getDoctrine(): ManagerRegistry
     {
         return $this->doctrine;
     }
 
-    public function setDoctrine(RegistryInterface $doctrine): SearchForm
+    public function setDoctrine(ManagerRegistry $doctrine): SearchForm
     {
         $this->doctrine = $doctrine;
 

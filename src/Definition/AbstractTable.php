@@ -15,7 +15,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -80,7 +79,7 @@ abstract class AbstractTable
     private $requestStack;
 
     /**
-     * @var RegistryInterface
+     * @var ManagerRegistry
      */
     private $doctrine;
 
@@ -839,12 +838,12 @@ abstract class AbstractTable
         $this->limit = $limit;
     }
 
-    protected function getDoctrine(): RegistryInterface
+    protected function getDoctrine(): ManagerRegistry
     {
         return $this->doctrine;
     }
 
-    protected function setDoctrine(RegistryInterface $doctrine): AbstractTable
+    protected function setDoctrine(ManagerRegistry $doctrine): AbstractTable
     {
         $this->doctrine = $doctrine;
 
