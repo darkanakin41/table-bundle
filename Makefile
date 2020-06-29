@@ -45,16 +45,10 @@ php_cs_dry_run: vendor
 twig_cs: ## Lance les contrôles qualité sur les templates TWIG
 twig_cs: vendor
 	./vendor/bin/twigcs lint src/Resources/views
-
-twig_cs: ## Lance les contrôles qualité sur les templates TWIG
-twig_cs: vendor
-	./vendor/bin/twigcs lint src/Resources/views
-
 test:
-	./vendor/bin/phpunit --coverage-text --coverage-html ./coverage
+	./vendor/bin/phpunit
 
 .PHONY: security php_cs php_cs_dry_run twig_cs
-
 
 .DEFAULT_GOAL := help
 help:
