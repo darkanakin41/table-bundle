@@ -45,7 +45,7 @@ class SearchForm extends AbstractType
             }
             $value = $form->get($field->getId())->getData();
             if (!empty($value)) {
-                $dql = $field->getQBFilter($table, $qb);
+                $dql = $field->getQBFilter($table);
                 if (false !== stripos($dql, 'LIKE')) {
                     $value = "%$value%";
                 }

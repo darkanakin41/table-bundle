@@ -42,6 +42,7 @@ class ExportTableHelper
     public function __construct(AbstractTable $table)
     {
         $this->table = $table;
+        $this->translator = $table->getTranslator();
     }
 
     public static function isPhpSpreadSheetEnabled()
@@ -73,12 +74,12 @@ class ExportTableHelper
     public function generateHeaders(Worksheet $worksheet, array $fields)
     {
         foreach ($fields as $key => $field) {
-            $columnLabel = $this->table->getTranslator()->trans($field->getLabel());
+            $columnLabel = $this->translator->trans($field->getLabel());
             $currentColumn = array_search($key, array_keys($fields));
 
             $coordinates = Coordinate::stringFromColumnIndex($currentColumn + 1);
 
-            $worksheet->setCellValue($coordinates.'1', $columnLabel);
+            $worksheet->setCellValue($coordinates . '1', $columnLabel);
         }
     }
 
@@ -96,19 +97,23 @@ class ExportTableHelper
                 $coordinates = Coordinate::stringFromColumnIndex($currentColumn + 1);
 
                 $value = $this->table->getValue($entity, $field);
+
+                if($field->isCustomExport()){
+                    $value = $field->getExportValue($value);
+                }
                 if (!empty($field->getValueToLabels())) {
                     $value = $field->getValueToLabel($value);
                 }
 
                 if ($field->isTranslation()) {
                     if (!empty($field->getTranslationPrefix())) {
-                        $value = $field->getTranslationPrefix().$value;
+                        $value = $field->getTranslationPrefix() . $value;
                     }
 
                     $value = $this->translator->trans($value);
                 }
 
-                $worksheet->setCellValue($coordinates.($index + 2), $value);
+                $worksheet->setCellValue($coordinates . ($index + 2), $value);
             }
         }
     }

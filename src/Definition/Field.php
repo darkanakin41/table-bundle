@@ -68,6 +68,15 @@ class Field
      * @var string
      */
     private $translation_prefix;
+
+    /**
+     * Define if there is a custom export function to use
+     * If set to true, the ExportTableHelper will call for the getExportValue function of the field
+     * By default, it is set to false
+     * @var bool
+     */
+    private $customExport = false;
+
     /**
      * @var AbstractTable|null
      */
@@ -343,7 +352,7 @@ class Field
             return $this->getDQL($table->getAlias()).' = :'.$this->getId();
         }
 
-        return $this->getDQL($table->getAlias()).' LIKE :'.$this->getId();
+        return sprintf('LOWER(%s) LIKE LOWER(:%s)', $this->getDQL($table->getAlias()), $this->getId());
     }
 
     public function getValue($item)
@@ -359,5 +368,33 @@ class Field
         $this->block = $block;
 
         return $this;
+    }
+
+    /**
+     * Check if the getExportValue must be called or not
+     * @return bool
+     */
+    public function isCustomExport(): bool
+    {
+        return $this->customExport;
+    }
+
+    /**
+     * Set if the getExportValue must be called or not
+     * @param bool $customExport
+     */
+    public function setCustomExport(bool $customExport): void
+    {
+        $this->customExport = $customExport;
+    }
+
+    /**
+     * Retrieve the export value
+     * @param mixed $value
+     * @return mixed
+     */
+    public function getExportValue($value)
+    {
+        return $value;
     }
 }
