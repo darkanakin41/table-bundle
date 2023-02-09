@@ -17,16 +17,16 @@
         }
     ],
     "require": {
-        "php": "^7.1",
+        "php": ">=7.1",
         "knplabs/knp-paginator-bundle": "*",
-        "symfony/form": "^4.0",
-        "symfony/framework-bundle": "^4.0",
+        "symfony/form": "*",
+        "symfony/framework-bundle": "*",
         "symfony/orm-pack": "*",
         "symfony/serializer-pack": "*",
-        "symfony/translation": "^4.0",
-        "symfony/twig-bundle": "^4.0",
-        "symfony/validator": "^4.0",
-        "symfony/yaml": "^4.0"
+        "symfony/translation": "*",
+        "symfony/twig-bundle": "*",
+        "symfony/validator": "*",
+        "symfony/yaml": "*"
     },
     "require-dev": {
         "doctrine/doctrine-bundle": "^1.3",
